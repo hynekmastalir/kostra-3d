@@ -18,7 +18,15 @@ export function createCards(ctx) {
   const st = id => state[id] ?? { b: 1, due: 0 };
   const save = () => store.set(KEY, state);
 
+  // Zobrazí jen vybraný okruh (celá kostra = vše).
+  function applyScope() {
+    const keep = new Set(inScope().map(b => b.id));
+    viewer.setMany(bones.filter(b => !keep.has(b.id)).map(b => b.id), false);
+    viewer.setMany([...keep], true);
+  }
+
   function buildQueue(force = false) {
+    applyScope();
     const now = Date.now();
     let pool = inScope().filter(b => force || st(b.id).due <= now);
     pool = shuffle(pool).sort((a, b) => st(a.id).b - st(b.id).b);   // slabší krabičky dřív, v rámci krabičky náhodně

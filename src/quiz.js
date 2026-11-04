@@ -18,7 +18,7 @@ export function createQuiz(ctx) {
 
   // ---------- nastavení ----------
   function showSetup() {
-    run = null; banner.hidden = true; viewer.setFocus(null); viewer.setMark(null); viewer.resetView();
+    run = null; banner.hidden = true; viewer.setFocus(null); viewer.setMark(null); viewer.showAll(); viewer.resetView();
     const errs = errorList();
     root.innerHTML = `
       <div class="section"><h3>Typ otázek</h3>
@@ -46,10 +46,19 @@ export function createQuiz(ctx) {
   }
 
   // ---------- průběh ----------
-  function start(ids) {
+  // Při testu z jedné části kostry se zobrazí jen tato část (u opakování chyb z celé kostry se zobrazí vše).
+  function applyScope(onlyScope) {
+    if (onlyScope && cfg.scope !== 'all') {
+      const keep = new Set(poolFor(cfg.scope).map(b => b.id));
+      viewer.setMany(bones.filter(b => !keep.has(b.id)).map(b => b.id), false);
+      viewer.setMany([...keep], true);
+    } else viewer.showAll();
+  }
+
+  function start(ids, onlyScope = true) {
     const kinds = ids.map(() => cfg.type === 'mix' ? (Math.random() < 0.5 ? 'identify' : 'locate') : cfg.type);
-    run = { qs: ids.map((id, i) => ({ id, kind: kinds[i] })), i: 0, results: [], waiting: false };
-    viewer.showAll(); viewer.setExplode(0); viewer.setGhost(true, 0.88);
+    run = { qs: ids.map((id, i) => ({ id, kind: kinds[i] })), i: 0, results: [], waiting: false, scoped: onlyScope };
+    applyScope(onlyScope); viewer.setExplode(0); viewer.setGhost(true, 0.88);
     viewer.resetView();
     nextQuestion();
   }
@@ -121,12 +130,12 @@ export function createQuiz(ctx) {
     if (t.closest('#type')) { cfg.type = t.dataset.v; store.set('quizCfg', cfg); syncSeg(); return; }
     if (t.closest('#ans')) { cfg.answer = t.dataset.v; store.set('quizCfg', cfg); syncSeg(); return; }
     if (t.id === 'start') start(shuffle(poolFor(cfg.scope).map(b => b.id)).slice(0, cfg.count));
-    else if (t.id === 'start-err') start(errorList().slice(0, cfg.count));
+    else if (t.id === 'start-err') start(errorList().slice(0, cfg.count), false);
     else if (t.id === 'clear-stats') { if (confirm('Smazat uloženou statistiku chyb?')) { stats = {}; saveStats(); showSetup(); } }
     else if (t.id === 'quit') showSetup();
     else if (t.id === 'next') { run.i++; nextQuestion(); }
     else if (t.id === 'again') showSetup();
-    else if (t.id === 'redo') start(shuffle(run.wrongIds));
+    else if (t.id === 'redo') start(shuffle(run.wrongIds), run.scoped);
     else if (t.id === 'show' && run?.waiting) finish(false, null, 'show');
     else if (t.closest('.choices') && run?.waiting) {
       const q = run.qs[run.i]; const b = byId.get(q.id); const pick = q.options[+t.dataset.k];
