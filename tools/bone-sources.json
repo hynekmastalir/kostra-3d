@@ -1,0 +1,814 @@
+[
+ {
+  "id": "FMA10014",
+  "en": "ninth thoracic vertebra"
+ },
+ {
+  "id": "FMA10037",
+  "en": "tenth thoracic vertebra"
+ },
+ {
+  "id": "FMA10059",
+  "en": "eleventh thoracic vertebra"
+ },
+ {
+  "id": "FMA10081",
+  "en": "twelfth thoracic vertebra"
+ },
+ {
+  "id": "FMA12519",
+  "en": "atlas"
+ },
+ {
+  "id": "FMA12520",
+  "en": "axis"
+ },
+ {
+  "id": "FMA12521",
+  "en": "third cervical vertebra"
+ },
+ {
+  "id": "FMA12522",
+  "en": "fourth cervical vertebra"
+ },
+ {
+  "id": "FMA12523",
+  "en": "fifth cervical vertebra"
+ },
+ {
+  "id": "FMA12524",
+  "en": "sixth cervical vertebra"
+ },
+ {
+  "id": "FMA12525",
+  "en": "seventh cervical vertebra"
+ },
+ {
+  "id": "FMA13072",
+  "en": "first lumbar vertebra"
+ },
+ {
+  "id": "FMA13073",
+  "en": "second lumbar vertebra"
+ },
+ {
+  "id": "FMA13074",
+  "en": "third lumbar vertebra"
+ },
+ {
+  "id": "FMA13075",
+  "en": "fourth lumbar vertebra"
+ },
+ {
+  "id": "FMA13076",
+  "en": "fifth lumbar vertebra"
+ },
+ {
+  "id": "FMA13322",
+  "en": "right clavicle"
+ },
+ {
+  "id": "FMA13323",
+  "en": "left clavicle"
+ },
+ {
+  "id": "FMA13395",
+  "en": "right scapula"
+ },
+ {
+  "id": "FMA13396",
+  "en": "left scapula"
+ },
+ {
+  "id": "FMA16202",
+  "en": "sacrum"
+ },
+ {
+  "id": "FMA16586",
+  "en": "right hip bone"
+ },
+ {
+  "id": "FMA16587",
+  "en": "left hip bone"
+ },
+ {
+  "id": "FMA230986",
+  "en": "middle phalanx of right little toe"
+ },
+ {
+  "id": "FMA230988",
+  "en": "middle phalanx of left little toe"
+ },
+ {
+  "id": "FMA23130",
+  "en": "right humerus"
+ },
+ {
+  "id": "FMA23131",
+  "en": "left humerus"
+ },
+ {
+  "id": "FMA23464",
+  "en": "right radius"
+ },
+ {
+  "id": "FMA23465",
+  "en": "left radius"
+ },
+ {
+  "id": "FMA23467",
+  "en": "right ulna"
+ },
+ {
+  "id": "FMA23468",
+  "en": "left ulna"
+ },
+ {
+  "id": "FMA23725",
+  "en": "right trapezoid"
+ },
+ {
+  "id": "FMA23938",
+  "en": "middle phalanx of left index finger"
+ },
+ {
+  "id": "FMA23940",
+  "en": "middle phalanx of left middle finger"
+ },
+ {
+  "id": "FMA23942",
+  "en": "middle phalanx of left ring finger"
+ },
+ {
+  "id": "FMA23944",
+  "en": "middle phalanx of left little finger"
+ },
+ {
+  "id": "FMA23951",
+  "en": "distal phalanx of left thumb"
+ },
+ {
+  "id": "FMA23953",
+  "en": "distal phalanx of left index finger"
+ },
+ {
+  "id": "FMA23955",
+  "en": "distal phalanx of left middle finger"
+ },
+ {
+  "id": "FMA23957",
+  "en": "distal phalanx of left ring finger"
+ },
+ {
+  "id": "FMA23959",
+  "en": "distal phalanx of left little finger"
+ },
+ {
+  "id": "FMA24435",
+  "en": "right scaphoid"
+ },
+ {
+  "id": "FMA24436",
+  "en": "left scaphoid"
+ },
+ {
+  "id": "FMA24437",
+  "en": "right lunate"
+ },
+ {
+  "id": "FMA24438",
+  "en": "left lunate"
+ },
+ {
+  "id": "FMA24439",
+  "en": "right triquetral"
+ },
+ {
+  "id": "FMA24440",
+  "en": "left triquetral"
+ },
+ {
+  "id": "FMA24441",
+  "en": "right pisiform"
+ },
+ {
+  "id": "FMA24442",
+  "en": "left pisiform"
+ },
+ {
+  "id": "FMA24443",
+  "en": "right trapezium"
+ },
+ {
+  "id": "FMA24444",
+  "en": "left trapezium"
+ },
+ {
+  "id": "FMA24445",
+  "en": "left trapezoid"
+ },
+ {
+  "id": "FMA24446",
+  "en": "right capitate"
+ },
+ {
+  "id": "FMA24447",
+  "en": "left capitate"
+ },
+ {
+  "id": "FMA24448",
+  "en": "right hamate"
+ },
+ {
+  "id": "FMA24449",
+  "en": "left hamate"
+ },
+ {
+  "id": "FMA24450",
+  "en": "proximal phalanx of right thumb"
+ },
+ {
+  "id": "FMA24451",
+  "en": "proximal phalanx of right index finger"
+ },
+ {
+  "id": "FMA24452",
+  "en": "proximal phalanx of right middle finger"
+ },
+ {
+  "id": "FMA24453",
+  "en": "proximal phalanx of right ring finger"
+ },
+ {
+  "id": "FMA24454",
+  "en": "proximal phalanx of right little finger"
+ },
+ {
+  "id": "FMA24455",
+  "en": "middle phalanx of right index finger"
+ },
+ {
+  "id": "FMA24456",
+  "en": "middle phalanx of right middle finger"
+ },
+ {
+  "id": "FMA24457",
+  "en": "middle phalanx of right ring finger"
+ },
+ {
+  "id": "FMA24458",
+  "en": "middle phalanx of right little finger"
+ },
+ {
+  "id": "FMA24459",
+  "en": "distal phalanx of right thumb"
+ },
+ {
+  "id": "FMA24460",
+  "en": "distal phalanx of right index finger"
+ },
+ {
+  "id": "FMA24461",
+  "en": "distal phalanx of right middle finger"
+ },
+ {
+  "id": "FMA24462",
+  "en": "distal phalanx of right ring finger"
+ },
+ {
+  "id": "FMA24463",
+  "en": "distal phalanx of right little finger"
+ },
+ {
+  "id": "FMA24464",
+  "en": "right first metacarpal bone"
+ },
+ {
+  "id": "FMA24465",
+  "en": "left first metacarpal bone"
+ },
+ {
+  "id": "FMA24466",
+  "en": "right second metacarpal bone"
+ },
+ {
+  "id": "FMA24467",
+  "en": "left second metacarpal bone"
+ },
+ {
+  "id": "FMA24468",
+  "en": "right third metacarpal bone"
+ },
+ {
+  "id": "FMA24469",
+  "en": "left third metacarpal bone"
+ },
+ {
+  "id": "FMA24470",
+  "en": "right fourth metacarpal bone"
+ },
+ {
+  "id": "FMA24471",
+  "en": "left fourth metacarpal bone"
+ },
+ {
+  "id": "FMA24472",
+  "en": "right fifth metacarpal bone"
+ },
+ {
+  "id": "FMA24473",
+  "en": "left fifth metacarpal bone"
+ },
+ {
+  "id": "FMA24474",
+  "en": "right femur"
+ },
+ {
+  "id": "FMA24475",
+  "en": "left femur"
+ },
+ {
+  "id": "FMA24477",
+  "en": "right tibia"
+ },
+ {
+  "id": "FMA24478",
+  "en": "left tibia"
+ },
+ {
+  "id": "FMA24480",
+  "en": "right fibula"
+ },
+ {
+  "id": "FMA24481",
+  "en": "left fibula"
+ },
+ {
+  "id": "FMA24482",
+  "en": "right talus"
+ },
+ {
+  "id": "FMA24483",
+  "en": "left talus"
+ },
+ {
+  "id": "FMA24486",
+  "en": "right patella"
+ },
+ {
+  "id": "FMA24487",
+  "en": "left patella"
+ },
+ {
+  "id": "FMA24497",
+  "en": "right calcaneus"
+ },
+ {
+  "id": "FMA24498",
+  "en": "left calcaneus"
+ },
+ {
+  "id": "FMA24500",
+  "en": "navicular bone of right foot"
+ },
+ {
+  "id": "FMA24501",
+  "en": "navicular bone of left foot"
+ },
+ {
+  "id": "FMA24507",
+  "en": "right first metatarsal bone"
+ },
+ {
+  "id": "FMA24508",
+  "en": "left first metatarsal bone"
+ },
+ {
+  "id": "FMA24509",
+  "en": "right second metatarsal bone"
+ },
+ {
+  "id": "FMA24510",
+  "en": "left second metatarsal bone"
+ },
+ {
+  "id": "FMA24511",
+  "en": "right third metatarsal bone"
+ },
+ {
+  "id": "FMA24512",
+  "en": "left third metatarsal bone"
+ },
+ {
+  "id": "FMA24513",
+  "en": "right fourth metatarsal bone"
+ },
+ {
+  "id": "FMA24514",
+  "en": "left fourth metatarsal bone"
+ },
+ {
+  "id": "FMA24515",
+  "en": "right fifth metatarsal bone"
+ },
+ {
+  "id": "FMA24516",
+  "en": "left fifth metatarsal bone"
+ },
+ {
+  "id": "FMA24521",
+  "en": "right medial cuneiform bone"
+ },
+ {
+  "id": "FMA24522",
+  "en": "left medial cuneiform bone"
+ },
+ {
+  "id": "FMA24523",
+  "en": "right intermediate cuneiform bone"
+ },
+ {
+  "id": "FMA24524",
+  "en": "left intermediate cuneiform bone"
+ },
+ {
+  "id": "FMA24525",
+  "en": "right lateral cuneiform bone"
+ },
+ {
+  "id": "FMA24526",
+  "en": "left lateral cuneiform bone"
+ },
+ {
+  "id": "FMA24528",
+  "en": "right cuboid bone"
+ },
+ {
+  "id": "FMA24529",
+  "en": "left cuboid bone"
+ },
+ {
+  "id": "FMA32634",
+  "en": "proximal phalanx of right second toe"
+ },
+ {
+  "id": "FMA32635",
+  "en": "proximal phalanx of left second toe"
+ },
+ {
+  "id": "FMA32636",
+  "en": "proximal phalanx of right third toe"
+ },
+ {
+  "id": "FMA32637",
+  "en": "proximal phalanx of left third toe"
+ },
+ {
+  "id": "FMA32638",
+  "en": "proximal phalanx of right fourth toe"
+ },
+ {
+  "id": "FMA32639",
+  "en": "proximal phalanx of left fourth toe"
+ },
+ {
+  "id": "FMA32640",
+  "en": "proximal phalanx of right little toe"
+ },
+ {
+  "id": "FMA32641",
+  "en": "proximal phalanx of left little toe"
+ },
+ {
+  "id": "FMA32642",
+  "en": "middle phalanx of right second toe"
+ },
+ {
+  "id": "FMA32643",
+  "en": "middle phalanx of left second toe"
+ },
+ {
+  "id": "FMA32644",
+  "en": "middle phalanx of right third toe"
+ },
+ {
+  "id": "FMA32645",
+  "en": "middle phalanx of left third toe"
+ },
+ {
+  "id": "FMA32646",
+  "en": "middle phalanx of right fourth toe"
+ },
+ {
+  "id": "FMA32647",
+  "en": "middle phalanx of left fourth toe"
+ },
+ {
+  "id": "FMA32650",
+  "en": "distal phalanx of right big toe"
+ },
+ {
+  "id": "FMA32651",
+  "en": "distal phalanx of left big toe"
+ },
+ {
+  "id": "FMA32652",
+  "en": "distal phalanx of right second toe"
+ },
+ {
+  "id": "FMA32653",
+  "en": "distal phalanx of left second toe"
+ },
+ {
+  "id": "FMA32654",
+  "en": "distal phalanx of right third toe"
+ },
+ {
+  "id": "FMA32655",
+  "en": "distal phalanx of left third toe"
+ },
+ {
+  "id": "FMA32656",
+  "en": "distal phalanx of right fourth toe"
+ },
+ {
+  "id": "FMA32657",
+  "en": "distal phalanx of left fourth toe"
+ },
+ {
+  "id": "FMA32658",
+  "en": "distal phalanx of right little toe"
+ },
+ {
+  "id": "FMA32659",
+  "en": "distal phalanx of left little toe"
+ },
+ {
+  "id": "FMA43253",
+  "en": "proximal phalanx of right big toe"
+ },
+ {
+  "id": "FMA43254",
+  "en": "proximal phalanx of left big toe"
+ },
+ {
+  "id": "FMA45097",
+  "en": "sesamoid bone of right foot"
+ },
+ {
+  "id": "FMA45098",
+  "en": "sesamoid bone of left foot"
+ },
+ {
+  "id": "FMA52734",
+  "en": "frontal bone"
+ },
+ {
+  "id": "FMA52735",
+  "en": "occipital bone"
+ },
+ {
+  "id": "FMA52736",
+  "en": "sphenoid bone"
+ },
+ {
+  "id": "FMA52738",
+  "en": "right temporal bone"
+ },
+ {
+  "id": "FMA52739",
+  "en": "left temporal bone"
+ },
+ {
+  "id": "FMA52740",
+  "en": "ethmoid"
+ },
+ {
+  "id": "FMA52748",
+  "en": "mandible"
+ },
+ {
+  "id": "FMA52749",
+  "en": "hyoid bone"
+ },
+ {
+  "id": "FMA52788",
+  "en": "right parietal bone"
+ },
+ {
+  "id": "FMA52789",
+  "en": "left parietal bone"
+ },
+ {
+  "id": "FMA52892",
+  "en": "right zygomatic bone"
+ },
+ {
+  "id": "FMA52893",
+  "en": "left zygomatic bone"
+ },
+ {
+  "id": "FMA53645",
+  "en": "right lacrimal bone"
+ },
+ {
+  "id": "FMA53646",
+  "en": "left lacrimal bone"
+ },
+ {
+  "id": "FMA53647",
+  "en": "right nasal bone"
+ },
+ {
+  "id": "FMA53648",
+  "en": "left nasal bone"
+ },
+ {
+  "id": "FMA53649",
+  "en": "right maxilla"
+ },
+ {
+  "id": "FMA53650",
+  "en": "left maxilla"
+ },
+ {
+  "id": "FMA53655",
+  "en": "right palatine bone"
+ },
+ {
+  "id": "FMA53656",
+  "en": "left palatine bone"
+ },
+ {
+  "id": "FMA54737",
+  "en": "right inferior nasal concha"
+ },
+ {
+  "id": "FMA54738",
+  "en": "left inferior nasal concha"
+ },
+ {
+  "id": "FMA65470",
+  "en": "proximal phalanx of left thumb"
+ },
+ {
+  "id": "FMA66791",
+  "en": "proximal phalanx of left little finger"
+ },
+ {
+  "id": "FMA71908",
+  "en": "proximal phalanx of left middle finger"
+ },
+ {
+  "id": "FMA71915",
+  "en": "proximal phalanx of left index finger"
+ },
+ {
+  "id": "FMA71916",
+  "en": "proximal phalanx of left ring finger"
+ },
+ {
+  "id": "FMA7486",
+  "en": "manubrium"
+ },
+ {
+  "id": "FMA7487",
+  "en": "body of sternum"
+ },
+ {
+  "id": "FMA7488",
+  "en": "xiphoid process"
+ },
+ {
+  "id": "FMA7857",
+  "en": "right first rib"
+ },
+ {
+  "id": "FMA7882",
+  "en": "right second rib"
+ },
+ {
+  "id": "FMA7909",
+  "en": "right third rib"
+ },
+ {
+  "id": "FMA7957",
+  "en": "right fourth rib"
+ },
+ {
+  "id": "FMA7987",
+  "en": "left first rib"
+ },
+ {
+  "id": "FMA8012",
+  "en": "left second rib"
+ },
+ {
+  "id": "FMA8039",
+  "en": "left third rib"
+ },
+ {
+  "id": "FMA8066",
+  "en": "right fifth rib"
+ },
+ {
+  "id": "FMA8093",
+  "en": "left fifth rib"
+ },
+ {
+  "id": "FMA8148",
+  "en": "left fourth rib"
+ },
+ {
+  "id": "FMA8175",
+  "en": "right sixth rib"
+ },
+ {
+  "id": "FMA8202",
+  "en": "left sixth rib"
+ },
+ {
+  "id": "FMA8229",
+  "en": "right seventh rib"
+ },
+ {
+  "id": "FMA8256",
+  "en": "left seventh rib"
+ },
+ {
+  "id": "FMA8283",
+  "en": "right eighth rib"
+ },
+ {
+  "id": "FMA8310",
+  "en": "left eighth rib"
+ },
+ {
+  "id": "FMA8364",
+  "en": "right ninth rib"
+ },
+ {
+  "id": "FMA8391",
+  "en": "left ninth rib"
+ },
+ {
+  "id": "FMA8445",
+  "en": "right tenth rib"
+ },
+ {
+  "id": "FMA8472",
+  "en": "left tenth rib"
+ },
+ {
+  "id": "FMA8531",
+  "en": "right eleventh rib"
+ },
+ {
+  "id": "FMA8532",
+  "en": "left eleventh rib"
+ },
+ {
+  "id": "FMA8533",
+  "en": "right twelfth rib"
+ },
+ {
+  "id": "FMA8534",
+  "en": "left twelfth rib"
+ },
+ {
+  "id": "FMA9165",
+  "en": "first thoracic vertebra"
+ },
+ {
+  "id": "FMA9187",
+  "en": "second thoracic vertebra"
+ },
+ {
+  "id": "FMA9209",
+  "en": "third thoracic vertebra"
+ },
+ {
+  "id": "FMA9248",
+  "en": "fourth thoracic vertebra"
+ },
+ {
+  "id": "FMA9710",
+  "en": "vomer"
+ },
+ {
+  "id": "FMA9922",
+  "en": "fifth thoracic vertebra"
+ },
+ {
+  "id": "FMA9945",
+  "en": "sixth thoracic vertebra"
+ },
+ {
+  "id": "FMA9968",
+  "en": "seventh thoracic vertebra"
+ },
+ {
+  "id": "FMA9991",
+  "en": "eighth thoracic vertebra"
+ }
+]

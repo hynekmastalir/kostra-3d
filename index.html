@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kostra 3D – učení kostí</title>
+<meta name="description" content="Interaktivní 3D model lidské kostry s českými názvy kostí. Prohlížeč, kartičky a testy.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E%F0%9F%A6%B4%3C/text%3E%3C/svg%3E">
+<script>
+  // nastavení motivu před vykreslením, aby neblikalo
+  try { var t = JSON.parse(localStorage.getItem('kostra3d:theme')); if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</head>
+<body>
+<div id="app">
+  <header id="top">
+    <h1><span aria-hidden="true">🦴</span> <span class="t">Kostra 3D</span></h1>
+    <nav id="tabs" role="tablist" aria-label="Režim">
+      <button role="tab" data-mode="browse" aria-selected="true">Prohlížeč</button>
+      <button role="tab" data-mode="cards" aria-selected="false">Kartičky</button>
+      <button role="tab" data-mode="quiz" aria-selected="false">Test</button>
+    </nav>
+    <button id="theme" class="icon-btn" aria-label="Přepnout tmavý a světlý režim" title="Tmavý / světlý režim"></button>
+  </header>
+
+  <main id="main">
+    <section id="stage" aria-label="3D model kostry">
+      <div id="gl"></div>
+      <div id="loading" role="status">
+        <div class="loading-card">
+          <div class="spinner" aria-hidden="true"></div>
+          <p id="loading-text">Načítám model kostry…</p>
+          <div class="bar"><i id="loading-bar"></i></div>
+        </div>
+      </div>
+      <div id="stage-tools">
+        <button id="reset-view" class="chip-btn" title="Vrátit celou kostru do původního pohledu">⟲ Reset pohledu</button>
+      </div>
+      <div id="banner" hidden></div>
+      <div id="info" hidden></div>
+    </section>
+
+    <aside id="panel" data-sheet="open" aria-label="Panel">
+      <button id="sheet-handle" aria-label="Sbalit nebo rozbalit panel" aria-expanded="true"><span></span></button>
+      <div id="panel-body">
+        <div id="view-browse"></div>
+        <div id="view-cards" hidden></div>
+        <div id="view-quiz" hidden></div>
+      </div>
+    </aside>
+  </main>
+
+  <footer id="foot">
+    <span>3D model: <a href="https://lifesciencedb.jp/bp3d/" target="_blank" rel="noopener">BodyParts3D</a>, © The Database Center for Life Science,
+    licence <a href="https://creativecommons.org/licenses/by-sa/2.1/jp/deed.cs" target="_blank" rel="noopener">CC BY-SA 2.1 Japan</a>.
+    Model byl zjednodušen a převeden do formátu GLB. <a href="https://github.com/hynekmastalir/kostra-3d" target="_blank" rel="noopener">Zdrojový kód</a></span>
+  </footer>
+</div>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

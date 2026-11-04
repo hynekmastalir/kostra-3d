@@ -1,0 +1,1829 @@
+[
+ {
+  "id": "FMA52734",
+  "en": "frontal bone",
+  "cs": "Kost čelní",
+  "la": "os frontale",
+  "group": "lebka",
+  "side": "střední",
+  "desc": "Tvoří čelo a horní stěnu očnic. Obsahuje čelní dutinu (sinus frontalis)."
+ },
+ {
+  "id": "FMA52788",
+  "en": "right parietal bone",
+  "cs": "Kost temenní",
+  "la": "os parietale",
+  "group": "lebka",
+  "side": "pravá",
+  "desc": "Párová plochá kost, která tvoří střechu a větší část bočních stěn mozkovny."
+ },
+ {
+  "id": "FMA52789",
+  "en": "left parietal bone",
+  "cs": "Kost temenní",
+  "la": "os parietale",
+  "group": "lebka",
+  "side": "levá",
+  "desc": "Párová plochá kost, která tvoří střechu a větší část bočních stěn mozkovny."
+ },
+ {
+  "id": "FMA52735",
+  "en": "occipital bone",
+  "cs": "Kost týlní",
+  "la": "os occipitale",
+  "group": "lebka",
+  "side": "střední",
+  "desc": "Tvoří zadní a spodní část mozkovny. Velkým týlním otvorem (foramen magnum) prochází mícha; kloubí se s nosičem."
+ },
+ {
+  "id": "FMA52738",
+  "en": "right temporal bone",
+  "cs": "Kost spánková",
+  "la": "os temporale",
+  "group": "lebka",
+  "side": "pravá",
+  "desc": "Tvoří spodní boční část lebky. Obsahuje střední a vnitřní ucho, nese kloubní jamku pro dolní čelist a bodcovitý výběžek."
+ },
+ {
+  "id": "FMA52739",
+  "en": "left temporal bone",
+  "cs": "Kost spánková",
+  "la": "os temporale",
+  "group": "lebka",
+  "side": "levá",
+  "desc": "Tvoří spodní boční část lebky. Obsahuje střední a vnitřní ucho, nese kloubní jamku pro dolní čelist a bodcovitý výběžek."
+ },
+ {
+  "id": "FMA52736",
+  "en": "sphenoid bone",
+  "cs": "Kost klínová",
+  "la": "os sphenoidale",
+  "group": "lebka",
+  "side": "střední",
+  "desc": "Nepárová kost ve spodině lební, spojená s většinou okolních kostí. Uprostřed má turecké sedlo, ve kterém leží podvěsek mozkový (hypofýza)."
+ },
+ {
+  "id": "FMA52740",
+  "en": "ethmoid",
+  "cs": "Kost čichová",
+  "la": "os ethmoidale",
+  "group": "lebka",
+  "side": "střední",
+  "desc": "Jemná kost mezi očnicemi. Tvoří část nosní přepážky a stěn nosní dutiny; sítovou ploténkou prochází čichová vlákna."
+ },
+ {
+  "id": "FMA53647",
+  "en": "right nasal bone",
+  "cs": "Kost nosní",
+  "la": "os nasale",
+  "group": "lebka",
+  "side": "pravá",
+  "desc": "Malá čtyřhranná kůstka, která tvoří hřbet nosu."
+ },
+ {
+  "id": "FMA53648",
+  "en": "left nasal bone",
+  "cs": "Kost nosní",
+  "la": "os nasale",
+  "group": "lebka",
+  "side": "levá",
+  "desc": "Malá čtyřhranná kůstka, která tvoří hřbet nosu."
+ },
+ {
+  "id": "FMA53645",
+  "en": "right lacrimal bone",
+  "cs": "Kost slzní",
+  "la": "os lacrimale",
+  "group": "lebka",
+  "side": "pravá",
+  "desc": "Nejmenší a nejkřehčí kost obličeje na vnitřní stěně očnice. Má jamku pro slzní váček."
+ },
+ {
+  "id": "FMA53646",
+  "en": "left lacrimal bone",
+  "cs": "Kost slzní",
+  "la": "os lacrimale",
+  "group": "lebka",
+  "side": "levá",
+  "desc": "Nejmenší a nejkřehčí kost obličeje na vnitřní stěně očnice. Má jamku pro slzní váček."
+ },
+ {
+  "id": "FMA52892",
+  "en": "right zygomatic bone",
+  "cs": "Kost lícní",
+  "la": "os zygomaticum",
+  "group": "lebka",
+  "side": "pravá",
+  "desc": "Tvoří výčnělek tváře a část boční stěny očnice. Spolu se spánkovou kostí vytváří jařmový oblouk."
+ },
+ {
+  "id": "FMA52893",
+  "en": "left zygomatic bone",
+  "cs": "Kost lícní",
+  "la": "os zygomaticum",
+  "group": "lebka",
+  "side": "levá",
+  "desc": "Tvoří výčnělek tváře a část boční stěny očnice. Spolu se spánkovou kostí vytváří jařmový oblouk."
+ },
+ {
+  "id": "FMA53649",
+  "en": "right maxilla",
+  "cs": "Horní čelist",
+  "la": "maxilla",
+  "group": "lebka",
+  "side": "pravá",
+  "desc": "Nese horní zuby, tvoří většinu tvrdého patra a část očnice i nosní dutiny. Obsahuje čelistní dutinu (sinus maxillaris)."
+ },
+ {
+  "id": "FMA53650",
+  "en": "left maxilla",
+  "cs": "Horní čelist",
+  "la": "maxilla",
+  "group": "lebka",
+  "side": "levá",
+  "desc": "Nese horní zuby, tvoří většinu tvrdého patra a část očnice i nosní dutiny. Obsahuje čelistní dutinu (sinus maxillaris)."
+ },
+ {
+  "id": "FMA53655",
+  "en": "right palatine bone",
+  "cs": "Kost patrová",
+  "la": "os palatinum",
+  "group": "lebka",
+  "side": "pravá",
+  "desc": "Tvoří zadní část tvrdého patra a část bočních stěn nosní dutiny."
+ },
+ {
+  "id": "FMA53656",
+  "en": "left palatine bone",
+  "cs": "Kost patrová",
+  "la": "os palatinum",
+  "group": "lebka",
+  "side": "levá",
+  "desc": "Tvoří zadní část tvrdého patra a část bočních stěn nosní dutiny."
+ },
+ {
+  "id": "FMA54737",
+  "en": "right inferior nasal concha",
+  "cs": "Skořepa nosní dolní",
+  "la": "concha nasalis inferior",
+  "group": "lebka",
+  "side": "pravá",
+  "desc": "Samostatná kost na boční stěně nosní dutiny. Zvětšuje povrch sliznice, která ohřívá a zvlhčuje vdechovaný vzduch."
+ },
+ {
+  "id": "FMA54738",
+  "en": "left inferior nasal concha",
+  "cs": "Skořepa nosní dolní",
+  "la": "concha nasalis inferior",
+  "group": "lebka",
+  "side": "levá",
+  "desc": "Samostatná kost na boční stěně nosní dutiny. Zvětšuje povrch sliznice, která ohřívá a zvlhčuje vdechovaný vzduch."
+ },
+ {
+  "id": "FMA9710",
+  "en": "vomer",
+  "cs": "Radlice",
+  "la": "vomer",
+  "group": "lebka",
+  "side": "střední",
+  "desc": "Nepárová tenká kost, která tvoří zadní dolní část nosní přepážky."
+ },
+ {
+  "id": "FMA52748",
+  "en": "mandible",
+  "cs": "Dolní čelist",
+  "la": "mandibula",
+  "group": "lebka",
+  "side": "střední",
+  "desc": "Jediná pohyblivá kost lebky. Nese dolní zuby a kloubí se se spánkovou kostí."
+ },
+ {
+  "id": "FMA52749",
+  "en": "hyoid bone",
+  "cs": "Jazylka",
+  "la": "os hyoideum",
+  "group": "lebka",
+  "side": "střední",
+  "desc": "Podkovovitá kost v krku, která se nekloubí s žádnou jinou kostí. Upínají se na ni svaly jazyka, dna ústního a hrtanu. V aplikaci je zařazena ke skupině Lebka."
+ },
+ {
+  "id": "FMA12519",
+  "en": "atlas",
+  "cs": "Nosič (C1)",
+  "la": "atlas",
+  "group": "pater",
+  "side": "střední",
+  "desc": "První krční obratel. Nemá tělo, je tvořen dvěma oblouky a bočními hmotami. Nese lebku, pohyb „ano“."
+ },
+ {
+  "id": "FMA12520",
+  "en": "axis",
+  "cs": "Čepovec (C2)",
+  "la": "axis",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Druhý krční obratel se zubem (dens axis), kolem kterého se otáčí nosič. Umožňuje otáčení hlavy („ne“)."
+ },
+ {
+  "id": "FMA12521",
+  "en": "third cervical vertebra",
+  "cs": "Krční obratel C3",
+  "la": "vertebra cervicalis III",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Krční obratel s malým tělem, rozdvojeným trnem a otvorem v příčném výběžku pro tepnu vertebrální."
+ },
+ {
+  "id": "FMA12522",
+  "en": "fourth cervical vertebra",
+  "cs": "Krční obratel C4",
+  "la": "vertebra cervicalis IV",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Krční obratel s malým tělem, rozdvojeným trnem a otvorem v příčném výběžku pro tepnu vertebrální."
+ },
+ {
+  "id": "FMA12523",
+  "en": "fifth cervical vertebra",
+  "cs": "Krční obratel C5",
+  "la": "vertebra cervicalis V",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Krční obratel s malým tělem, rozdvojeným trnem a otvorem v příčném výběžku pro tepnu vertebrální."
+ },
+ {
+  "id": "FMA12524",
+  "en": "sixth cervical vertebra",
+  "cs": "Krční obratel C6",
+  "la": "vertebra cervicalis VI",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Krční obratel s malým tělem, rozdvojeným trnem a otvorem v příčném výběžku pro tepnu vertebrální."
+ },
+ {
+  "id": "FMA12525",
+  "en": "seventh cervical vertebra",
+  "cs": "Krční obratel C7",
+  "la": "vertebra cervicalis VII",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Má dlouhý, hmatný trnový výběžek, proto se jmenuje vertebra prominens. Slouží k orientaci při počítání obratlů."
+ },
+ {
+  "id": "FMA9165",
+  "en": "first thoracic vertebra",
+  "cs": "Hrudní obratel Th1",
+  "la": "vertebra thoracica I",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Hrudní obratel má na těle a příčném výběžku kloubní plošky pro žebra a dlouhý, dolů skloněný trn."
+ },
+ {
+  "id": "FMA9187",
+  "en": "second thoracic vertebra",
+  "cs": "Hrudní obratel Th2",
+  "la": "vertebra thoracica II",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Hrudní obratel má na těle a příčném výběžku kloubní plošky pro žebra a dlouhý, dolů skloněný trn."
+ },
+ {
+  "id": "FMA9209",
+  "en": "third thoracic vertebra",
+  "cs": "Hrudní obratel Th3",
+  "la": "vertebra thoracica III",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Hrudní obratel má na těle a příčném výběžku kloubní plošky pro žebra a dlouhý, dolů skloněný trn."
+ },
+ {
+  "id": "FMA9248",
+  "en": "fourth thoracic vertebra",
+  "cs": "Hrudní obratel Th4",
+  "la": "vertebra thoracica IV",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Hrudní obratel má na těle a příčném výběžku kloubní plošky pro žebra a dlouhý, dolů skloněný trn."
+ },
+ {
+  "id": "FMA9922",
+  "en": "fifth thoracic vertebra",
+  "cs": "Hrudní obratel Th5",
+  "la": "vertebra thoracica V",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Hrudní obratel má na těle a příčném výběžku kloubní plošky pro žebra a dlouhý, dolů skloněný trn."
+ },
+ {
+  "id": "FMA9945",
+  "en": "sixth thoracic vertebra",
+  "cs": "Hrudní obratel Th6",
+  "la": "vertebra thoracica VI",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Hrudní obratel má na těle a příčném výběžku kloubní plošky pro žebra a dlouhý, dolů skloněný trn."
+ },
+ {
+  "id": "FMA9968",
+  "en": "seventh thoracic vertebra",
+  "cs": "Hrudní obratel Th7",
+  "la": "vertebra thoracica VII",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Hrudní obratel má na těle a příčném výběžku kloubní plošky pro žebra a dlouhý, dolů skloněný trn."
+ },
+ {
+  "id": "FMA9991",
+  "en": "eighth thoracic vertebra",
+  "cs": "Hrudní obratel Th8",
+  "la": "vertebra thoracica VIII",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Hrudní obratel má na těle a příčném výběžku kloubní plošky pro žebra a dlouhý, dolů skloněný trn."
+ },
+ {
+  "id": "FMA10014",
+  "en": "ninth thoracic vertebra",
+  "cs": "Hrudní obratel Th9",
+  "la": "vertebra thoracica IX",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Hrudní obratel má na těle a příčném výběžku kloubní plošky pro žebra a dlouhý, dolů skloněný trn."
+ },
+ {
+  "id": "FMA10037",
+  "en": "tenth thoracic vertebra",
+  "cs": "Hrudní obratel Th10",
+  "la": "vertebra thoracica X",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Hrudní obratel má na těle a příčném výběžku kloubní plošky pro žebra a dlouhý, dolů skloněný trn."
+ },
+ {
+  "id": "FMA10059",
+  "en": "eleventh thoracic vertebra",
+  "cs": "Hrudní obratel Th11",
+  "la": "vertebra thoracica XI",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Hrudní obratel má na těle a příčném výběžku kloubní plošky pro žebra a dlouhý, dolů skloněný trn."
+ },
+ {
+  "id": "FMA10081",
+  "en": "twelfth thoracic vertebra",
+  "cs": "Hrudní obratel Th12",
+  "la": "vertebra thoracica XII",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Hrudní obratel má na těle a příčném výběžku kloubní plošky pro žebra a dlouhý, dolů skloněný trn."
+ },
+ {
+  "id": "FMA13072",
+  "en": "first lumbar vertebra",
+  "cs": "Bederní obratel L1",
+  "la": "vertebra lumbalis I",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Největší a nejmohutnější pohyblivé obratle, s masivním tělem a krátkým silným trnem. Nesou největší zátěž."
+ },
+ {
+  "id": "FMA13073",
+  "en": "second lumbar vertebra",
+  "cs": "Bederní obratel L2",
+  "la": "vertebra lumbalis II",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Největší a nejmohutnější pohyblivé obratle, s masivním tělem a krátkým silným trnem. Nesou největší zátěž."
+ },
+ {
+  "id": "FMA13074",
+  "en": "third lumbar vertebra",
+  "cs": "Bederní obratel L3",
+  "la": "vertebra lumbalis III",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Největší a nejmohutnější pohyblivé obratle, s masivním tělem a krátkým silným trnem. Nesou největší zátěž."
+ },
+ {
+  "id": "FMA13075",
+  "en": "fourth lumbar vertebra",
+  "cs": "Bederní obratel L4",
+  "la": "vertebra lumbalis IV",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Největší a nejmohutnější pohyblivé obratle, s masivním tělem a krátkým silným trnem. Nesou největší zátěž."
+ },
+ {
+  "id": "FMA13076",
+  "en": "fifth lumbar vertebra",
+  "cs": "Bederní obratel L5",
+  "la": "vertebra lumbalis V",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Největší a nejmohutnější pohyblivé obratle, s masivním tělem a krátkým silným trnem. Nesou největší zátěž."
+ },
+ {
+  "id": "FMA16202",
+  "en": "sacrum",
+  "cs": "Kost křížová",
+  "la": "os sacrum",
+  "group": "pater",
+  "side": "střední",
+  "desc": "Klín srostlých pěti křížových obratlů. Tvoří zadní stěnu pánve a kloubí se s kostmi pánevními (kloub křížokyčelní). V aplikaci je zařazena do páteře."
+ },
+ {
+  "id": "FMA7486",
+  "en": "manubrium",
+  "cs": "Rukojeť hrudní kosti",
+  "la": "manubrium sterni",
+  "group": "hrudnik",
+  "side": "střední",
+  "desc": "Horní část hrudní kosti. Kloubí se s klíčními kostmi a s prvním žebrem; nahoře má jugulární zářez."
+ },
+ {
+  "id": "FMA7487",
+  "en": "body of sternum",
+  "cs": "Tělo hrudní kosti",
+  "la": "corpus sterni",
+  "group": "hrudnik",
+  "side": "střední",
+  "desc": "Střední, nejdelší část hrudní kosti. Připojují se k ní chrupavky 2. až 7. žebra."
+ },
+ {
+  "id": "FMA7488",
+  "en": "xiphoid process",
+  "cs": "Mečovitý výběžek",
+  "la": "processus xiphoideus",
+  "group": "hrudnik",
+  "side": "střední",
+  "desc": "Nejmenší, dolní část hrudní kosti, v dětství chrupavčitá a později zkostnatělá."
+ },
+ {
+  "id": "FMA7857",
+  "en": "right first rib",
+  "cs": "Žebro I",
+  "la": "costa I",
+  "group": "hrudnik",
+  "side": "pravá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti. Nejkratší, nejširší a nejvíce zakřivené žebro, leží téměř vodorovně pod klíční kostí."
+ },
+ {
+  "id": "FMA7987",
+  "en": "left first rib",
+  "cs": "Žebro I",
+  "la": "costa I",
+  "group": "hrudnik",
+  "side": "levá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti. Nejkratší, nejširší a nejvíce zakřivené žebro, leží téměř vodorovně pod klíční kostí."
+ },
+ {
+  "id": "FMA7882",
+  "en": "right second rib",
+  "cs": "Žebro II",
+  "la": "costa II",
+  "group": "hrudnik",
+  "side": "pravá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti."
+ },
+ {
+  "id": "FMA8012",
+  "en": "left second rib",
+  "cs": "Žebro II",
+  "la": "costa II",
+  "group": "hrudnik",
+  "side": "levá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti."
+ },
+ {
+  "id": "FMA7909",
+  "en": "right third rib",
+  "cs": "Žebro III",
+  "la": "costa III",
+  "group": "hrudnik",
+  "side": "pravá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti."
+ },
+ {
+  "id": "FMA8039",
+  "en": "left third rib",
+  "cs": "Žebro III",
+  "la": "costa III",
+  "group": "hrudnik",
+  "side": "levá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti."
+ },
+ {
+  "id": "FMA7957",
+  "en": "right fourth rib",
+  "cs": "Žebro IV",
+  "la": "costa IV",
+  "group": "hrudnik",
+  "side": "pravá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti."
+ },
+ {
+  "id": "FMA8148",
+  "en": "left fourth rib",
+  "cs": "Žebro IV",
+  "la": "costa IV",
+  "group": "hrudnik",
+  "side": "levá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti."
+ },
+ {
+  "id": "FMA8066",
+  "en": "right fifth rib",
+  "cs": "Žebro V",
+  "la": "costa V",
+  "group": "hrudnik",
+  "side": "pravá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti."
+ },
+ {
+  "id": "FMA8093",
+  "en": "left fifth rib",
+  "cs": "Žebro V",
+  "la": "costa V",
+  "group": "hrudnik",
+  "side": "levá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti."
+ },
+ {
+  "id": "FMA8175",
+  "en": "right sixth rib",
+  "cs": "Žebro VI",
+  "la": "costa VI",
+  "group": "hrudnik",
+  "side": "pravá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti."
+ },
+ {
+  "id": "FMA8202",
+  "en": "left sixth rib",
+  "cs": "Žebro VI",
+  "la": "costa VI",
+  "group": "hrudnik",
+  "side": "levá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti."
+ },
+ {
+  "id": "FMA8229",
+  "en": "right seventh rib",
+  "cs": "Žebro VII",
+  "la": "costa VII",
+  "group": "hrudnik",
+  "side": "pravá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti."
+ },
+ {
+  "id": "FMA8256",
+  "en": "left seventh rib",
+  "cs": "Žebro VII",
+  "la": "costa VII",
+  "group": "hrudnik",
+  "side": "levá",
+  "desc": "Pravé žebro (costa vera): chrupavkou je připojeno přímo k hrudní kosti."
+ },
+ {
+  "id": "FMA8283",
+  "en": "right eighth rib",
+  "cs": "Žebro VIII",
+  "la": "costa VIII",
+  "group": "hrudnik",
+  "side": "pravá",
+  "desc": "Nepravé žebro (costa spuria): chrupavkou je připojeno k chrupavce žebra nad sebou."
+ },
+ {
+  "id": "FMA8310",
+  "en": "left eighth rib",
+  "cs": "Žebro VIII",
+  "la": "costa VIII",
+  "group": "hrudnik",
+  "side": "levá",
+  "desc": "Nepravé žebro (costa spuria): chrupavkou je připojeno k chrupavce žebra nad sebou."
+ },
+ {
+  "id": "FMA8364",
+  "en": "right ninth rib",
+  "cs": "Žebro IX",
+  "la": "costa IX",
+  "group": "hrudnik",
+  "side": "pravá",
+  "desc": "Nepravé žebro (costa spuria): chrupavkou je připojeno k chrupavce žebra nad sebou."
+ },
+ {
+  "id": "FMA8391",
+  "en": "left ninth rib",
+  "cs": "Žebro IX",
+  "la": "costa IX",
+  "group": "hrudnik",
+  "side": "levá",
+  "desc": "Nepravé žebro (costa spuria): chrupavkou je připojeno k chrupavce žebra nad sebou."
+ },
+ {
+  "id": "FMA8445",
+  "en": "right tenth rib",
+  "cs": "Žebro X",
+  "la": "costa X",
+  "group": "hrudnik",
+  "side": "pravá",
+  "desc": "Nepravé žebro (costa spuria): chrupavkou je připojeno k chrupavce žebra nad sebou."
+ },
+ {
+  "id": "FMA8472",
+  "en": "left tenth rib",
+  "cs": "Žebro X",
+  "la": "costa X",
+  "group": "hrudnik",
+  "side": "levá",
+  "desc": "Nepravé žebro (costa spuria): chrupavkou je připojeno k chrupavce žebra nad sebou."
+ },
+ {
+  "id": "FMA8531",
+  "en": "right eleventh rib",
+  "cs": "Žebro XI",
+  "la": "costa XI",
+  "group": "hrudnik",
+  "side": "pravá",
+  "desc": "Volné žebro (costa fluctuans): končí volně ve svalstvu, nemá spojení s hrudní kostí."
+ },
+ {
+  "id": "FMA8532",
+  "en": "left eleventh rib",
+  "cs": "Žebro XI",
+  "la": "costa XI",
+  "group": "hrudnik",
+  "side": "levá",
+  "desc": "Volné žebro (costa fluctuans): končí volně ve svalstvu, nemá spojení s hrudní kostí."
+ },
+ {
+  "id": "FMA8533",
+  "en": "right twelfth rib",
+  "cs": "Žebro XII",
+  "la": "costa XII",
+  "group": "hrudnik",
+  "side": "pravá",
+  "desc": "Volné žebro (costa fluctuans): končí volně ve svalstvu, nemá spojení s hrudní kostí. Nejkratší z volných žeber."
+ },
+ {
+  "id": "FMA8534",
+  "en": "left twelfth rib",
+  "cs": "Žebro XII",
+  "la": "costa XII",
+  "group": "hrudnik",
+  "side": "levá",
+  "desc": "Volné žebro (costa fluctuans): končí volně ve svalstvu, nemá spojení s hrudní kostí. Nejkratší z volných žeber."
+ },
+ {
+  "id": "FMA13322",
+  "en": "right clavicle",
+  "cs": "Klíční kost",
+  "la": "clavicula",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "S-tvarovaná kost, která spojuje lopatku s hrudní kostí. Je nejčastěji zlomenou kostí v oblasti ramene."
+ },
+ {
+  "id": "FMA13323",
+  "en": "left clavicle",
+  "cs": "Klíční kost",
+  "la": "clavicula",
+  "group": "horni",
+  "side": "levá",
+  "desc": "S-tvarovaná kost, která spojuje lopatku s hrudní kostí. Je nejčastěji zlomenou kostí v oblasti ramene."
+ },
+ {
+  "id": "FMA13395",
+  "en": "right scapula",
+  "cs": "Lopatka",
+  "la": "scapula",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Plochá trojúhelníková kost na zadní straně hrudníku. Nese kloubní jamku ramenního kloubu a hřeben (spina scapulae)."
+ },
+ {
+  "id": "FMA13396",
+  "en": "left scapula",
+  "cs": "Lopatka",
+  "la": "scapula",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Plochá trojúhelníková kost na zadní straně hrudníku. Nese kloubní jamku ramenního kloubu a hřeben (spina scapulae)."
+ },
+ {
+  "id": "FMA23130",
+  "en": "right humerus",
+  "cs": "Kost pažní",
+  "la": "humerus",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Dlouhá kost paže. Nahoře se kloubí s lopatkou, dole s předloktím (loketní kloub)."
+ },
+ {
+  "id": "FMA23131",
+  "en": "left humerus",
+  "cs": "Kost pažní",
+  "la": "humerus",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Dlouhá kost paže. Nahoře se kloubí s lopatkou, dole s předloktím (loketní kloub)."
+ },
+ {
+  "id": "FMA23464",
+  "en": "right radius",
+  "cs": "Kost vřetenní",
+  "la": "radius",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Kost předloktí na straně palce. Při otáčení předloktí se otáčí kolem kosti loketní."
+ },
+ {
+  "id": "FMA23465",
+  "en": "left radius",
+  "cs": "Kost vřetenní",
+  "la": "radius",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Kost předloktí na straně palce. Při otáčení předloktí se otáčí kolem kosti loketní."
+ },
+ {
+  "id": "FMA23467",
+  "en": "right ulna",
+  "cs": "Kost loketní",
+  "la": "ulna",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Kost předloktí na straně malíku. Nahoře tvoří loketní výběžek (olecranon), který je hmatný jako špička lokte."
+ },
+ {
+  "id": "FMA23468",
+  "en": "left ulna",
+  "cs": "Kost loketní",
+  "la": "ulna",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Kost předloktí na straně malíku. Nahoře tvoří loketní výběžek (olecranon), který je hmatný jako špička lokte."
+ },
+ {
+  "id": "FMA24435",
+  "en": "right scaphoid",
+  "cs": "Kost člunková",
+  "la": "os scaphoideum",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Největší kost v řadě proximální. Často se láme při pádu na zápěstí."
+ },
+ {
+  "id": "FMA24436",
+  "en": "left scaphoid",
+  "cs": "Kost člunková",
+  "la": "os scaphoideum",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Největší kost v řadě proximální. Často se láme při pádu na zápěstí."
+ },
+ {
+  "id": "FMA24437",
+  "en": "right lunate",
+  "cs": "Kost poloměsíčitá",
+  "la": "os lunatum",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Kost uprostřed proximální řady zápěstí, kloubí se s kostí vřetenní."
+ },
+ {
+  "id": "FMA24438",
+  "en": "left lunate",
+  "cs": "Kost poloměsíčitá",
+  "la": "os lunatum",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Kost uprostřed proximální řady zápěstí, kloubí se s kostí vřetenní."
+ },
+ {
+  "id": "FMA24439",
+  "en": "right triquetral",
+  "cs": "Kost trojhranná",
+  "la": "os triquetrum",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Kost na loketní straně proximální řady zápěstí."
+ },
+ {
+  "id": "FMA24440",
+  "en": "left triquetral",
+  "cs": "Kost trojhranná",
+  "la": "os triquetrum",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Kost na loketní straně proximální řady zápěstí."
+ },
+ {
+  "id": "FMA24441",
+  "en": "right pisiform",
+  "cs": "Kost hrášková",
+  "la": "os pisiforme",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Nejmenší zápěstní kost, sezamská kůstka v šlaše ohýbače zápěstí."
+ },
+ {
+  "id": "FMA24442",
+  "en": "left pisiform",
+  "cs": "Kost hrášková",
+  "la": "os pisiforme",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Nejmenší zápěstní kost, sezamská kůstka v šlaše ohýbače zápěstí."
+ },
+ {
+  "id": "FMA24443",
+  "en": "right trapezium",
+  "cs": "Kost čtyřhranná větší",
+  "la": "os trapezium",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Distální řada zápěstí; tvoří sedlový kloub s prvním záprstním kůstkou (kořen palce)."
+ },
+ {
+  "id": "FMA24444",
+  "en": "left trapezium",
+  "cs": "Kost čtyřhranná větší",
+  "la": "os trapezium",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Distální řada zápěstí; tvoří sedlový kloub s prvním záprstním kůstkou (kořen palce)."
+ },
+ {
+  "id": "FMA23725",
+  "en": "right trapezoid",
+  "cs": "Kost čtyřhranná menší",
+  "la": "os trapezoideum",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Nejmenší kost distální řady zápěstí, kloubí se s druhou kostí záprstní."
+ },
+ {
+  "id": "FMA24445",
+  "en": "left trapezoid",
+  "cs": "Kost čtyřhranná menší",
+  "la": "os trapezoideum",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Nejmenší kost distální řady zápěstí, kloubí se s druhou kostí záprstní."
+ },
+ {
+  "id": "FMA24446",
+  "en": "right capitate",
+  "cs": "Kost hlavatá",
+  "la": "os capitatum",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Největší zápěstní kost, leží uprostřed distální řady."
+ },
+ {
+  "id": "FMA24447",
+  "en": "left capitate",
+  "cs": "Kost hlavatá",
+  "la": "os capitatum",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Největší zápěstní kost, leží uprostřed distální řady."
+ },
+ {
+  "id": "FMA24448",
+  "en": "right hamate",
+  "cs": "Kost háková",
+  "la": "os hamatum",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Kost na straně malíku v distální řadě; má hákovitý výběžek (hamulus)."
+ },
+ {
+  "id": "FMA24449",
+  "en": "left hamate",
+  "cs": "Kost háková",
+  "la": "os hamatum",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Kost na straně malíku v distální řadě; má hákovitý výběžek (hamulus)."
+ },
+ {
+  "id": "FMA24464",
+  "en": "right first metacarpal bone",
+  "cs": "Kost záprstní I",
+  "la": "os metacarpale I",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Dlouhá kůstka kořene palce, nejkratší a nejpohyblivější."
+ },
+ {
+  "id": "FMA24465",
+  "en": "left first metacarpal bone",
+  "cs": "Kost záprstní I",
+  "la": "os metacarpale I",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Dlouhá kůstka kořene palce, nejkratší a nejpohyblivější."
+ },
+ {
+  "id": "FMA24466",
+  "en": "right second metacarpal bone",
+  "cs": "Kost záprstní II",
+  "la": "os metacarpale II",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Dlouhá kůstka dlaně. Kloubí se se zápěstím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24467",
+  "en": "left second metacarpal bone",
+  "cs": "Kost záprstní II",
+  "la": "os metacarpale II",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Dlouhá kůstka dlaně. Kloubí se se zápěstím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24468",
+  "en": "right third metacarpal bone",
+  "cs": "Kost záprstní III",
+  "la": "os metacarpale III",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Dlouhá kůstka dlaně. Kloubí se se zápěstím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24469",
+  "en": "left third metacarpal bone",
+  "cs": "Kost záprstní III",
+  "la": "os metacarpale III",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Dlouhá kůstka dlaně. Kloubí se se zápěstím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24470",
+  "en": "right fourth metacarpal bone",
+  "cs": "Kost záprstní IV",
+  "la": "os metacarpale IV",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Dlouhá kůstka dlaně. Kloubí se se zápěstím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24471",
+  "en": "left fourth metacarpal bone",
+  "cs": "Kost záprstní IV",
+  "la": "os metacarpale IV",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Dlouhá kůstka dlaně. Kloubí se se zápěstím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24472",
+  "en": "right fifth metacarpal bone",
+  "cs": "Kost záprstní V",
+  "la": "os metacarpale V",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Dlouhá kůstka dlaně. Kloubí se se zápěstím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24473",
+  "en": "left fifth metacarpal bone",
+  "cs": "Kost záprstní V",
+  "la": "os metacarpale V",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Dlouhá kůstka dlaně. Kloubí se se zápěstím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24450",
+  "en": "proximal phalanx of right thumb",
+  "cs": "Proximální článek palce",
+  "la": "phalanx proximalis pollicis",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Palec má jen dva články (proximální a distální)."
+ },
+ {
+  "id": "FMA65470",
+  "en": "proximal phalanx of left thumb",
+  "cs": "Proximální článek palce",
+  "la": "phalanx proximalis pollicis",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Palec má jen dva články (proximální a distální)."
+ },
+ {
+  "id": "FMA24451",
+  "en": "proximal phalanx of right index finger",
+  "cs": "Proximální článek ukazováčku",
+  "la": "phalanx proximalis indicis",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA71915",
+  "en": "proximal phalanx of left index finger",
+  "cs": "Proximální článek ukazováčku",
+  "la": "phalanx proximalis indicis",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA24452",
+  "en": "proximal phalanx of right middle finger",
+  "cs": "Proximální článek prostředníku",
+  "la": "phalanx proximalis digiti medii",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA71908",
+  "en": "proximal phalanx of left middle finger",
+  "cs": "Proximální článek prostředníku",
+  "la": "phalanx proximalis digiti medii",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA24453",
+  "en": "proximal phalanx of right ring finger",
+  "cs": "Proximální článek prsteníku",
+  "la": "phalanx proximalis digiti annularis",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA71916",
+  "en": "proximal phalanx of left ring finger",
+  "cs": "Proximální článek prsteníku",
+  "la": "phalanx proximalis digiti annularis",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA24454",
+  "en": "proximal phalanx of right little finger",
+  "cs": "Proximální článek malíčku",
+  "la": "phalanx proximalis digiti minimi",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA66791",
+  "en": "proximal phalanx of left little finger",
+  "cs": "Proximální článek malíčku",
+  "la": "phalanx proximalis digiti minimi",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA24455",
+  "en": "middle phalanx of right index finger",
+  "cs": "Střední článek ukazováčku",
+  "la": "phalanx media indicis",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA23938",
+  "en": "middle phalanx of left index finger",
+  "cs": "Střední článek ukazováčku",
+  "la": "phalanx media indicis",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA24456",
+  "en": "middle phalanx of right middle finger",
+  "cs": "Střední článek prostředníku",
+  "la": "phalanx media digiti medii",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA23940",
+  "en": "middle phalanx of left middle finger",
+  "cs": "Střední článek prostředníku",
+  "la": "phalanx media digiti medii",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA24457",
+  "en": "middle phalanx of right ring finger",
+  "cs": "Střední článek prsteníku",
+  "la": "phalanx media digiti annularis",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA23942",
+  "en": "middle phalanx of left ring finger",
+  "cs": "Střední článek prsteníku",
+  "la": "phalanx media digiti annularis",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA24458",
+  "en": "middle phalanx of right little finger",
+  "cs": "Střední článek malíčku",
+  "la": "phalanx media digiti minimi",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA23944",
+  "en": "middle phalanx of left little finger",
+  "cs": "Střední článek malíčku",
+  "la": "phalanx media digiti minimi",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA24459",
+  "en": "distal phalanx of right thumb",
+  "cs": "Distální článek palce",
+  "la": "phalanx distalis pollicis",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Palec má jen dva články (proximální a distální)."
+ },
+ {
+  "id": "FMA23951",
+  "en": "distal phalanx of left thumb",
+  "cs": "Distální článek palce",
+  "la": "phalanx distalis pollicis",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Palec má jen dva články (proximální a distální)."
+ },
+ {
+  "id": "FMA24460",
+  "en": "distal phalanx of right index finger",
+  "cs": "Distální článek ukazováčku",
+  "la": "phalanx distalis indicis",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA23953",
+  "en": "distal phalanx of left index finger",
+  "cs": "Distální článek ukazováčku",
+  "la": "phalanx distalis indicis",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA24461",
+  "en": "distal phalanx of right middle finger",
+  "cs": "Distální článek prostředníku",
+  "la": "phalanx distalis digiti medii",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA23955",
+  "en": "distal phalanx of left middle finger",
+  "cs": "Distální článek prostředníku",
+  "la": "phalanx distalis digiti medii",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA24462",
+  "en": "distal phalanx of right ring finger",
+  "cs": "Distální článek prsteníku",
+  "la": "phalanx distalis digiti annularis",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA23957",
+  "en": "distal phalanx of left ring finger",
+  "cs": "Distální článek prsteníku",
+  "la": "phalanx distalis digiti annularis",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA24463",
+  "en": "distal phalanx of right little finger",
+  "cs": "Distální článek malíčku",
+  "la": "phalanx distalis digiti minimi",
+  "group": "horni",
+  "side": "pravá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA23959",
+  "en": "distal phalanx of left little finger",
+  "cs": "Distální článek malíčku",
+  "la": "phalanx distalis digiti minimi",
+  "group": "horni",
+  "side": "levá",
+  "desc": "Prsty ruky mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA16586",
+  "en": "right hip bone",
+  "cs": "Kost pánevní",
+  "la": "os coxae",
+  "group": "panev",
+  "side": "pravá",
+  "desc": "Srůst kosti kyčelní, sedací a stydké. Obsahuje jamku kyčelního kloubu (acetabulum). Obě kosti pánevní spolu s křížovou kostí tvoří pánev."
+ },
+ {
+  "id": "FMA16587",
+  "en": "left hip bone",
+  "cs": "Kost pánevní",
+  "la": "os coxae",
+  "group": "panev",
+  "side": "levá",
+  "desc": "Srůst kosti kyčelní, sedací a stydké. Obsahuje jamku kyčelního kloubu (acetabulum). Obě kosti pánevní spolu s křížovou kostí tvoří pánev."
+ },
+ {
+  "id": "FMA24474",
+  "en": "right femur",
+  "cs": "Kost stehenní",
+  "la": "femur",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Nejdelší a nejsilnější kost těla. Nahoře má hlavici kloubu kyčelního, dole se kloubí s holení a čéškou."
+ },
+ {
+  "id": "FMA24475",
+  "en": "left femur",
+  "cs": "Kost stehenní",
+  "la": "femur",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Nejdelší a nejsilnější kost těla. Nahoře má hlavici kloubu kyčelního, dole se kloubí s holení a čéškou."
+ },
+ {
+  "id": "FMA24486",
+  "en": "right patella",
+  "cs": "Čéška",
+  "la": "patella",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Největší sezamská kost těla, vložená do šlachy čtyřhlavého svalu stehenního. Chrání kolenní kloub."
+ },
+ {
+  "id": "FMA24487",
+  "en": "left patella",
+  "cs": "Čéška",
+  "la": "patella",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Největší sezamská kost těla, vložená do šlachy čtyřhlavého svalu stehenního. Chrání kolenní kloub."
+ },
+ {
+  "id": "FMA24477",
+  "en": "right tibia",
+  "cs": "Kost holenní",
+  "la": "tibia",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Mohutná kost bérce na vnitřní straně. Nese hlavní váhu těla; přední hrana (hřeben) je hmatná pod kůží."
+ },
+ {
+  "id": "FMA24478",
+  "en": "left tibia",
+  "cs": "Kost holenní",
+  "la": "tibia",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Mohutná kost bérce na vnitřní straně. Nese hlavní váhu těla; přední hrana (hřeben) je hmatná pod kůží."
+ },
+ {
+  "id": "FMA24480",
+  "en": "right fibula",
+  "cs": "Kost lýtková",
+  "la": "fibula",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Tenká kost bérce na zevní straně. Nenese téměř žádnou váhu, tvoří zevní kotník."
+ },
+ {
+  "id": "FMA24481",
+  "en": "left fibula",
+  "cs": "Kost lýtková",
+  "la": "fibula",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Tenká kost bérce na zevní straně. Nenese téměř žádnou váhu, tvoří zevní kotník."
+ },
+ {
+  "id": "FMA24482",
+  "en": "right talus",
+  "cs": "Kost hlezenní",
+  "la": "talus",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Kost zánártní, která tvoří kloub hlezenní s kostmi bérce a přenáší váhu těla na patu a nárt."
+ },
+ {
+  "id": "FMA24483",
+  "en": "left talus",
+  "cs": "Kost hlezenní",
+  "la": "talus",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Kost zánártní, která tvoří kloub hlezenní s kostmi bérce a přenáší váhu těla na patu a nárt."
+ },
+ {
+  "id": "FMA24497",
+  "en": "right calcaneus",
+  "cs": "Kost patní",
+  "la": "calcaneus",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Největší kost zánártí, tvoří patu. Upíná se na ni Achillova šlacha."
+ },
+ {
+  "id": "FMA24498",
+  "en": "left calcaneus",
+  "cs": "Kost patní",
+  "la": "calcaneus",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Největší kost zánártí, tvoří patu. Upíná se na ni Achillova šlacha."
+ },
+ {
+  "id": "FMA24500",
+  "en": "navicular bone of right foot",
+  "cs": "Kost loďkovitá",
+  "la": "os naviculare",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Kost zánártí na vnitřní straně nohy, mezi kostí hlezenní a třemi kostmi klínovými."
+ },
+ {
+  "id": "FMA24501",
+  "en": "navicular bone of left foot",
+  "cs": "Kost loďkovitá",
+  "la": "os naviculare",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Kost zánártí na vnitřní straně nohy, mezi kostí hlezenní a třemi kostmi klínovými."
+ },
+ {
+  "id": "FMA24528",
+  "en": "right cuboid bone",
+  "cs": "Kost krychlová",
+  "la": "os cuboideum",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Kost zánártí na zevní straně nohy, kloubí se s kostí patní a 4. a 5. kostí nártní."
+ },
+ {
+  "id": "FMA24529",
+  "en": "left cuboid bone",
+  "cs": "Kost krychlová",
+  "la": "os cuboideum",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Kost zánártí na zevní straně nohy, kloubí se s kostí patní a 4. a 5. kostí nártní."
+ },
+ {
+  "id": "FMA24521",
+  "en": "right medial cuneiform bone",
+  "cs": "Kost klínová mediální",
+  "la": "os cuneiforme mediale",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Největší ze tří klínových kostí, na vnitřní straně nohy; kloubí se s první kostí nártní."
+ },
+ {
+  "id": "FMA24522",
+  "en": "left medial cuneiform bone",
+  "cs": "Kost klínová mediální",
+  "la": "os cuneiforme mediale",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Největší ze tří klínových kostí, na vnitřní straně nohy; kloubí se s první kostí nártní."
+ },
+ {
+  "id": "FMA24523",
+  "en": "right intermediate cuneiform bone",
+  "cs": "Kost klínová střední",
+  "la": "os cuneiforme intermedium",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Nejmenší ze tří klínových kostí, uprostřed zánártí."
+ },
+ {
+  "id": "FMA24524",
+  "en": "left intermediate cuneiform bone",
+  "cs": "Kost klínová střední",
+  "la": "os cuneiforme intermedium",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Nejmenší ze tří klínových kostí, uprostřed zánártí."
+ },
+ {
+  "id": "FMA24525",
+  "en": "right lateral cuneiform bone",
+  "cs": "Kost klínová laterální",
+  "la": "os cuneiforme laterale",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Klínová kost na zevní straně, mezi střední klínovou a krychlovou kostí."
+ },
+ {
+  "id": "FMA24526",
+  "en": "left lateral cuneiform bone",
+  "cs": "Kost klínová laterální",
+  "la": "os cuneiforme laterale",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Klínová kost na zevní straně, mezi střední klínovou a krychlovou kostí."
+ },
+ {
+  "id": "FMA24507",
+  "en": "right first metatarsal bone",
+  "cs": "Kost nártní I",
+  "la": "os metatarsale I",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Nejkratší a nejsilnější kost nártní, nese hlavní zátěž při odrazu."
+ },
+ {
+  "id": "FMA24508",
+  "en": "left first metatarsal bone",
+  "cs": "Kost nártní I",
+  "la": "os metatarsale I",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Nejkratší a nejsilnější kost nártní, nese hlavní zátěž při odrazu."
+ },
+ {
+  "id": "FMA24509",
+  "en": "right second metatarsal bone",
+  "cs": "Kost nártní II",
+  "la": "os metatarsale II",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Dlouhá kůstka nártu, kloubí se se zánártím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24510",
+  "en": "left second metatarsal bone",
+  "cs": "Kost nártní II",
+  "la": "os metatarsale II",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Dlouhá kůstka nártu, kloubí se se zánártím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24511",
+  "en": "right third metatarsal bone",
+  "cs": "Kost nártní III",
+  "la": "os metatarsale III",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Dlouhá kůstka nártu, kloubí se se zánártím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24512",
+  "en": "left third metatarsal bone",
+  "cs": "Kost nártní III",
+  "la": "os metatarsale III",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Dlouhá kůstka nártu, kloubí se se zánártím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24513",
+  "en": "right fourth metatarsal bone",
+  "cs": "Kost nártní IV",
+  "la": "os metatarsale IV",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Dlouhá kůstka nártu, kloubí se se zánártím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24514",
+  "en": "left fourth metatarsal bone",
+  "cs": "Kost nártní IV",
+  "la": "os metatarsale IV",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Dlouhá kůstka nártu, kloubí se se zánártím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24515",
+  "en": "right fifth metatarsal bone",
+  "cs": "Kost nártní V",
+  "la": "os metatarsale V",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Dlouhá kůstka nártu, kloubí se se zánártím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA24516",
+  "en": "left fifth metatarsal bone",
+  "cs": "Kost nártní V",
+  "la": "os metatarsale V",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Dlouhá kůstka nártu, kloubí se se zánártím a s proximálním článkem prstu."
+ },
+ {
+  "id": "FMA43253",
+  "en": "proximal phalanx of right big toe",
+  "cs": "Proximální článek palce nohy",
+  "la": "phalanx proximalis hallucis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Palec nohy má jen dva články (proximální a distální)."
+ },
+ {
+  "id": "FMA43254",
+  "en": "proximal phalanx of left big toe",
+  "cs": "Proximální článek palce nohy",
+  "la": "phalanx proximalis hallucis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Palec nohy má jen dva články (proximální a distální)."
+ },
+ {
+  "id": "FMA32634",
+  "en": "proximal phalanx of right second toe",
+  "cs": "Proximální článek druhého prstu nohy",
+  "la": "phalanx proximalis digiti secundi pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32635",
+  "en": "proximal phalanx of left second toe",
+  "cs": "Proximální článek druhého prstu nohy",
+  "la": "phalanx proximalis digiti secundi pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32636",
+  "en": "proximal phalanx of right third toe",
+  "cs": "Proximální článek třetího prstu nohy",
+  "la": "phalanx proximalis digiti tertii pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32637",
+  "en": "proximal phalanx of left third toe",
+  "cs": "Proximální článek třetího prstu nohy",
+  "la": "phalanx proximalis digiti tertii pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32638",
+  "en": "proximal phalanx of right fourth toe",
+  "cs": "Proximální článek čtvrtého prstu nohy",
+  "la": "phalanx proximalis digiti quarti pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32639",
+  "en": "proximal phalanx of left fourth toe",
+  "cs": "Proximální článek čtvrtého prstu nohy",
+  "la": "phalanx proximalis digiti quarti pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32640",
+  "en": "proximal phalanx of right little toe",
+  "cs": "Proximální článek malíku nohy",
+  "la": "phalanx proximalis digiti minimi pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32641",
+  "en": "proximal phalanx of left little toe",
+  "cs": "Proximální článek malíku nohy",
+  "la": "phalanx proximalis digiti minimi pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32642",
+  "en": "middle phalanx of right second toe",
+  "cs": "Střední článek druhého prstu nohy",
+  "la": "phalanx media digiti secundi pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32643",
+  "en": "middle phalanx of left second toe",
+  "cs": "Střední článek druhého prstu nohy",
+  "la": "phalanx media digiti secundi pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32644",
+  "en": "middle phalanx of right third toe",
+  "cs": "Střední článek třetího prstu nohy",
+  "la": "phalanx media digiti tertii pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32645",
+  "en": "middle phalanx of left third toe",
+  "cs": "Střední článek třetího prstu nohy",
+  "la": "phalanx media digiti tertii pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32646",
+  "en": "middle phalanx of right fourth toe",
+  "cs": "Střední článek čtvrtého prstu nohy",
+  "la": "phalanx media digiti quarti pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32647",
+  "en": "middle phalanx of left fourth toe",
+  "cs": "Střední článek čtvrtého prstu nohy",
+  "la": "phalanx media digiti quarti pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA230986",
+  "en": "middle phalanx of right little toe",
+  "cs": "Střední článek malíku nohy",
+  "la": "phalanx media digiti minimi pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA230988",
+  "en": "middle phalanx of left little toe",
+  "cs": "Střední článek malíku nohy",
+  "la": "phalanx media digiti minimi pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32650",
+  "en": "distal phalanx of right big toe",
+  "cs": "Distální článek palce nohy",
+  "la": "phalanx distalis hallucis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Palec nohy má jen dva články (proximální a distální)."
+ },
+ {
+  "id": "FMA32651",
+  "en": "distal phalanx of left big toe",
+  "cs": "Distální článek palce nohy",
+  "la": "phalanx distalis hallucis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Palec nohy má jen dva články (proximální a distální)."
+ },
+ {
+  "id": "FMA32652",
+  "en": "distal phalanx of right second toe",
+  "cs": "Distální článek druhého prstu nohy",
+  "la": "phalanx distalis digiti secundi pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32653",
+  "en": "distal phalanx of left second toe",
+  "cs": "Distální článek druhého prstu nohy",
+  "la": "phalanx distalis digiti secundi pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32654",
+  "en": "distal phalanx of right third toe",
+  "cs": "Distální článek třetího prstu nohy",
+  "la": "phalanx distalis digiti tertii pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32655",
+  "en": "distal phalanx of left third toe",
+  "cs": "Distální článek třetího prstu nohy",
+  "la": "phalanx distalis digiti tertii pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32656",
+  "en": "distal phalanx of right fourth toe",
+  "cs": "Distální článek čtvrtého prstu nohy",
+  "la": "phalanx distalis digiti quarti pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32657",
+  "en": "distal phalanx of left fourth toe",
+  "cs": "Distální článek čtvrtého prstu nohy",
+  "la": "phalanx distalis digiti quarti pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32658",
+  "en": "distal phalanx of right little toe",
+  "cs": "Distální článek malíku nohy",
+  "la": "phalanx distalis digiti minimi pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA32659",
+  "en": "distal phalanx of left little toe",
+  "cs": "Distální článek malíku nohy",
+  "la": "phalanx distalis digiti minimi pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Prsty nohy mají tři články: proximální, střední a distální."
+ },
+ {
+  "id": "FMA45097",
+  "en": "sesamoid bone of right foot",
+  "cs": "Sezamská kůstka nohy",
+  "la": "os sesamoideum pedis",
+  "group": "dolni",
+  "side": "pravá",
+  "desc": "Malé kůstky uložené v šlachách pod hlavicí první kosti nártní. V modelu jsou obě kůstky v jednom meshi."
+ },
+ {
+  "id": "FMA45098",
+  "en": "sesamoid bone of left foot",
+  "cs": "Sezamská kůstka nohy",
+  "la": "os sesamoideum pedis",
+  "group": "dolni",
+  "side": "levá",
+  "desc": "Malé kůstky uložené v šlachách pod hlavicí první kosti nártní. V modelu jsou obě kůstky v jednom meshi."
+ }
+]
