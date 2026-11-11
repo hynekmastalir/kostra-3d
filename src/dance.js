@@ -180,7 +180,12 @@ export function createDance(ctx) {
     <p class="muted small">Vyber tanec. Kostru můžeš při tanci otáčet a přibližovat.</p>
     <div class="dances" id="dances">${Object.entries(DANCES).map(([id, d]) => `<button class="dance-btn" type="button" data-d="${id}" aria-pressed="false"><span class="em" aria-hidden="true">${d.emoji}</span><span>${esc(d.name)}</span></button>`).join('')}</div>
     <label class="field"><span>Rychlost: <b id="dance-speed-val">100 %</b></span><input type="range" id="dance-speed" min="50" max="160" step="5" value="100"></label>
-    <button class="btn block" type="button" id="dance-stop" disabled>Zastavit a postavit se</button>`;
+    <button class="btn block" type="button" id="dance-stop" disabled>Zastavit a postavit se</button>
+    <div class="row scatter-row">
+      <button class="btn grow" type="button" id="dance-scatter">💥 Rozsypat</button>
+      <button class="btn grow" type="button" id="dance-assemble" disabled>🧩 Složit</button>
+    </div>
+    <p class="muted small" id="dance-hint">Rozsypání: kosti se uvolní, spadnou a zůstanou ležet na zemi. Složit je zase přivolá zpátky.</p>`;
 
   const mat = new THREE.Matrix4(), tmpA = new THREE.Matrix4(), tmpB = new THREE.Matrix4(), q = new THREE.Quaternion(), v = new THREE.Vector3();
   const AX = new THREE.Vector3(1, 0, 0), AY = new THREE.Vector3(0, 1, 0), AZ = new THREE.Vector3(0, 0, 1);
@@ -272,9 +277,153 @@ export function createDance(ctx) {
     viewer.onFrame = null; viewer.requestRender();
   }
 
+  // záběr kamery: celá postava i s prostorem pro skok, nebo (po rozsypání) hromada kostí u země
+  function frameDance(pile) {
+    const c = rig.P.center, tanV = Math.tan(THREE.MathUtils.degToRad(viewer.camera.fov / 2)), asp = viewer.camera.aspect;
+    const h = pile ? 70 : 280, w = pile ? 150 : 130, ty = pile ? rig.groundY + 14 : c.y + 30;
+    const dist = Math.max((h / 2) / tanV, (w / 2) / (tanV * asp)) * (pile ? 1.15 : 1.05);
+    viewer._flyTo(new THREE.Vector3(0, ty + (pile ? 40 : 0), c.z + dist), new THREE.Vector3(0, ty, c.z), pile ? 1100 : 700);
+  }
+
+  /* ---------- rozsypání: každá kost je tuhé těleso s gravitací, odrazem a třením ---------- */
+  const DIRS = [];
+  for (const x of [-1, 0, 1]) for (const y of [-1, 0, 1]) for (const z of [-1, 0, 1]) if (x || y || z) DIRS.push(new THREE.Vector3(x, y, z).normalize());
+  const G = 900, REST_E = 0.3, ONE = new THREE.Vector3(1, 1, 1);
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  let phys = null;           // { mode: 'fall' | 'assemble', t, last, bodies }
+
+  // krajní body kosti (v různých směrech) slouží jako body dotyku se zemí
+  function extremePoints(mesh, c0) {
+    const a = mesh.geometry.attributes.position, best = DIRS.map(() => -Infinity), idx = DIRS.map(() => 0);
+    for (let i = 0; i < a.count; i++) {
+      const x = a.getX(i) - c0.x, y = a.getY(i) - c0.y, z = a.getZ(i) - c0.z;
+      for (let d = 0; d < DIRS.length; d++) { const dot = x * DIRS[d].x + y * DIRS[d].y + z * DIRS[d].z; if (dot > best[d]) { best[d] = dot; idx[d] = i; } }
+    }
+    return [...new Set(idx)].map(i => new THREE.Vector3(a.getX(i) - c0.x, a.getY(i) - c0.y, a.getZ(i) - c0.z));
+  }
+
+  function segmentMatrices(pose) { return compute(pose).M; }
+
+  function scatter() {
+    if (phys) return;
+    current = null; hold = null;
+    const M = segmentMatrices(shown), cm = rig.P.center, bodies = [];
+    let minY = Infinity, maxY = -Infinity;
+    for (const [name, list] of Object.entries(rig.segMeshes)) for (const mesh of list) {
+      const A = M[name];
+      if (!mesh.userData.phys) {
+        const bb = mesh.geometry.boundingBox, c0 = bb.getCenter(new THREE.Vector3());
+        mesh.userData.phys = { c0, pts: extremePoints(mesh, c0), R: Math.max(1.2, mesh.geometry.boundingSphere.radius * 0.55) };
+      }
+      const ph = mesh.userData.phys, pos = ph.c0.clone().applyMatrix4(A), q = new THREE.Quaternion(), tr = new THREE.Vector3();
+      A.decompose(tr, q, new THREE.Vector3());
+      minY = Math.min(minY, pos.y); maxY = Math.max(maxY, pos.y);
+      bodies.push({ mesh, ph, pos, q, v: new THREE.Vector3(), w: new THREE.Vector3(), delay: 0, sleepT: 0, asleep: false, seg: name });
+    }
+    for (const b of bodies) {
+      const h = (b.pos.y - minY) / Math.max(1, maxY - minY);      // 0 = dole, 1 = nahoře: nejdřív se zhroutí spodek
+      b.delay = h * 0.45 + rnd(0, 0.25);
+      b.v.set((b.pos.x - cm.x) * 0.25 + rnd(-22, 22), rnd(10, 90), (b.pos.z - cm.z) * 0.25 + rnd(-22, 22));
+      b.w.set(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1)).normalize().multiplyScalar(rnd(2, 7));
+    }
+    phys = { mode: 'fall', t: 0, last: performance.now() / 1000, bodies };
+    shadow.visible = false;
+    setButtons();
+    setTimeout(() => { if (phys && phys.mode === 'fall') frameDance(true); }, 900);
+    viewer.requestRender();
+  }
+
+  const _r = new THREE.Vector3(), _ax = new THREE.Vector3(), _dq = new THREE.Quaternion();
+  function stepFall(dt) {
+    const ground = rig.groundY + 0.15;
+    for (const b of phys.bodies) {
+      if (phys.t < b.delay || b.asleep) continue;
+      b.v.y -= G * dt;
+      b.pos.addScaledVector(b.v, dt);
+      const wl = b.w.length();
+      if (wl > 1e-6) { _ax.copy(b.w).divideScalar(wl); _dq.setFromAxisAngle(_ax, wl * dt); b.q.premultiply(_dq).normalize(); }
+      // nejhlubší bod kosti pod zemí: vytlačit ven
+      let pen = 0;
+      for (const s of b.ph.pts) { _r.copy(s).applyQuaternion(b.q); const y = b.pos.y + _r.y - ground; if (y < pen) pen = y; }
+      let touching = false;
+      if (pen < 0) {
+        b.pos.y -= pen; touching = true;
+        const invI = 1 / (0.4 * b.ph.R * b.ph.R);
+        for (const s of b.ph.pts) {
+          _r.copy(s).applyQuaternion(b.q);
+          if (b.pos.y + _r.y - ground > 0.05) continue;
+          // rychlost bodu dotyku: v + w x r (jen složka y)
+          const vcy = b.v.y + (b.w.z * _r.x - b.w.x * _r.z);
+          if (vcy >= 0) continue;
+          const j = -(1 + REST_E) * vcy / (1 + invI * (_r.x * _r.x + _r.z * _r.z));
+          b.v.y += j; b.w.x += invI * (-_r.z * j); b.w.z += invI * (_r.x * j);
+        }
+        b.v.x *= 0.95; b.v.z *= 0.95; b.w.multiplyScalar(0.9);
+        if (Math.abs(b.v.y) < 16) b.v.y = 0;
+      }
+      if (touching && b.v.lengthSq() < 100 && b.w.lengthSq() < 9) { b.sleepT += dt; if (b.sleepT > 0.2) { b.asleep = true; b.v.set(0, 0, 0); b.w.set(0, 0, 0); } } else b.sleepT = 0;
+    }
+  }
+
+  function writeBodies() {
+    for (const b of phys.bodies) {
+      _r.copy(b.ph.c0).applyQuaternion(b.q);
+      b.mesh.matrix.compose(_ax.copy(b.pos).sub(_r), b.q, ONE);
+      b.mesh.matrixWorldNeedsUpdate = true;
+    }
+  }
+
+  function assemble() {
+    if (!phys || phys.mode === 'assemble') return;
+    const M = segmentMatrices(blank()); let minY = Infinity, maxY = -Infinity;
+    for (const b of phys.bodies) {
+      const A = M[b.seg], q = new THREE.Quaternion(); A.decompose(_ax, q, ONE.clone());
+      b.toPos = b.ph.c0.clone().applyMatrix4(A); b.toQ = q;
+      b.fromPos = b.pos.clone(); b.fromQ = b.q.clone();
+      minY = Math.min(minY, b.toPos.y); maxY = Math.max(maxY, b.toPos.y);
+    }
+    for (const b of phys.bodies) b.delay = ((b.toPos.y - minY) / Math.max(1, maxY - minY)) * 0.5 + rnd(0, 0.12);
+    phys.mode = 'assemble'; phys.t = 0; phys.last = performance.now() / 1000; setButtons(); frameDance(false); viewer.requestRender();
+  }
+
+  // vrací true, dokud se má dál vykreslovat
+  function stepPhys(now) {
+    const sec = now / 1000, dt = Math.min(0.1, Math.max(0, sec - phys.last)); phys.last = sec; phys.t += dt;   // reálný čas i na pomalém zařízení
+    if (phys.mode === 'fall') {
+      const n = Math.max(1, Math.ceil(dt / 0.012));
+      for (let i = 0; i < n; i++) stepFall(dt / n);
+      writeBodies();
+      return phys.bodies.some(b => !b.asleep) || phys.t < 1;
+    }
+    let done = true;
+    for (const b of phys.bodies) {
+      const k = Math.min(1, Math.max(0, (phys.t - b.delay) / 1.0)); if (k < 1) done = false;
+      const e = k * k * (3 - 2 * k);
+      b.pos.lerpVectors(b.fromPos, b.toPos, e); b.pos.y += Math.sin(Math.PI * e) * 26;
+      b.q.slerpQuaternions(b.fromQ, b.toQ, e);
+    }
+    writeBodies();
+    if (done) {
+      phys = null; shown = blank(); blendFrom = blank(); shadow.visible = true; apply(shown); setButtons();
+      return false;
+    }
+    return true;
+  }
+
+  function setButtons() {
+    const idle = !phys, falling = phys && phys.mode === 'fall';
+    $('#dance-scatter').disabled = !idle;
+    $('#dance-assemble').disabled = !falling;
+    document.querySelectorAll('#dances .dance-btn').forEach(b => { b.disabled = !idle; });
+    $('#dance-stop').disabled = !(idle && current);
+    $('#dance-hint').textContent = !phys ? 'Rozsypání: kosti se uvolní, spadnou a zůstanou ležet na zemi. Složit je zase přivolá zpátky.'
+      : phys.mode === 'fall' ? 'Kosti leží na zemi. Můžeš se kolem nich otáčet a přibližovat. Tlačítkem Složit je přivoláš zpátky.' : 'Kosti se skládají…';
+  }
+
   // plynulý přechod mezi pózami: blendFrom -> cíl během 0,4 s
   function onFrame(now) {
     if (!active) return false;
+    if (phys) return stepPhys(now);
     if (hold) { apply(hold); return false; }
     const sec = now / 1000, playing = !!current;
     let target = REST;
@@ -288,6 +437,7 @@ export function createDance(ctx) {
   }
 
   function start(id) {
+    if (phys) return;
     const sec = performance.now() / 1000;
     hold = null; blendFrom = { ...shown }; current = id; startedAt = sec; blendStart = sec;
     document.querySelectorAll('#dances .dance-btn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.d === id)));
@@ -303,6 +453,8 @@ export function createDance(ctx) {
 
   root.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b) start(b.dataset.d); });
   $('#dance-stop', root).onclick = stopDance;
+  $('#dance-scatter', root).onclick = scatter;
+  $('#dance-assemble', root).onclick = assemble;
   $('#dance-speed', root).oninput = e => { speed = e.target.value / 100; $('#dance-speed-val', root).textContent = e.target.value + ' %'; };
 
   return {
@@ -310,14 +462,10 @@ export function createDance(ctx) {
       active = true; root.hidden = false;
       viewer.setFocus(null); viewer.setMark(null); viewer.showAll(); viewer.setExplode(0); viewer.setGhost(false);
       setup();
-      // kamera: celá postava i s prostorem pro skok
-      const c = rig.P.center, h = 280;
-      const tanV = Math.tan(THREE.MathUtils.degToRad(viewer.camera.fov / 2));
-      const dist = Math.max((h / 2) / tanV, (130 / 2) / (tanV * viewer.camera.aspect)) * 1.05;
-      viewer._flyTo(new THREE.Vector3(0, c.y + 30, c.z + dist), new THREE.Vector3(0, c.y + 30, c.z));
+      frameDance(false);
       viewer.requestRender();
     },
-    leave() { active = false; root.hidden = true; current = null; restore(); },
-    _debug: { get rig() { return rig; }, Y(id, t) { return compute({ ...blank(), ...DANCES[id].pose(t) }).Y; }, period: id => DANCES[id].period, start, show(id, t) { current = null; hold = { ...blank(), ...DANCES[id].pose(t) }; viewer.requestRender(); } },
+    leave() { active = false; root.hidden = true; current = null; phys = null; if (shadow) shadow.visible = true; restore(); setButtons(); },
+    _debug: { get rig() { return rig; }, scatter, assemble, get phys() { return phys; }, Y(id, t) { return compute({ ...blank(), ...DANCES[id].pose(t) }).Y; }, period: id => DANCES[id].period, start, show(id, t) { current = null; hold = { ...blank(), ...DANCES[id].pose(t) }; viewer.requestRender(); } },
   };
 }

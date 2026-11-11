@@ -175,3 +175,6 @@ input[type=range] { width: 100%; min-height: var(--tap); accent-color: var(--acc
 .dance-btn .em{font-size:2rem;line-height:1}
 .dance-btn[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
 @media (max-width:520px){#tabs{gap:2px}#tabs button{padding:0 8px!important;font-size:.88rem!important}}
+
+.scatter-row{margin-top:10px}
+.dance-btn[disabled]{opacity:.5}
