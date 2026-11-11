@@ -1,0 +1,323 @@
+import * as THREE from 'three';
+import { bones } from './data.js';
+import { $, esc } from './ui.js';
+
+/* Tanec kostry.
+   Model se skládá z 203 pevných kostí, proto vznikne „kostra v kostře“: kosti se rozdělí do segmentů
+   (pánev, trup, hlava, paže a nohy po třech článcích) a segmenty se otáčejí kolem kloubů. Klouby se
+   spočítají z tvaru kostí (hlavice stehenní kosti, kolenní plocha holeně apod.). Pohyb je dopředná kinematika:
+   matice segmentu = matice rodiče x posun do kloubu x otočení x posun zpět. */
+
+const D2R = Math.PI / 180;
+const sm = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+const pos = x => Math.max(0, x);
+
+/* ---------- segmenty a klouby ---------- */
+function segmentOf(b) {
+  const sd = b.side === 'pravá' ? 'R' : b.side === 'levá' ? 'L' : '';
+  switch (b.group) {
+    case 'lebka': return 'head';
+    case 'pater': return b.la === 'atlas' ? 'head' : b.la === 'os sacrum' ? 'pelvis' : 'torso';
+    case 'hrudnik': return 'torso';
+    case 'panev': return 'pelvis';
+    case 'horni':
+      if (b.la === 'clavicula' || b.la === 'scapula') return 'torso';
+      if (b.la === 'humerus') return 'uarm' + sd;
+      if (b.la === 'radius' || b.la === 'ulna') return 'farm' + sd;
+      return 'hand' + sd;
+    default:
+      if (b.la === 'femur' || b.la === 'patella') return 'thigh' + sd;
+      if (b.la === 'tibia' || b.la === 'fibula') return 'shank' + sd;
+      return 'foot' + sd;
+  }
+}
+
+// střed vrcholů v pásu u horního nebo dolního konce kosti
+function bandCentroid(mesh, end, frac) {
+  const bb = mesh.geometry.boundingBox, a = mesh.geometry.attributes.position;
+  const h = bb.max.y - bb.min.y, lim = end === 'top' ? bb.max.y - h * frac : bb.min.y + h * frac;
+  let x = 0, z = 0, n = 0;
+  for (let i = 0; i < a.count; i++) {
+    const y = a.getY(i);
+    if (end === 'top' ? y >= lim : y <= lim) { x += a.getX(i); z += a.getZ(i); n++; }
+  }
+  return n ? new THREE.Vector2(x / n, z / n) : new THREE.Vector2((bb.min.x + bb.max.x) / 2, (bb.min.z + bb.max.z) / 2);
+}
+
+export function buildRig(meshes) {
+  const key = (la, side) => `${la}|${side}`;
+  const byKey = new Map(bones.map(b => [key(b.la, b.side), b]));
+  const mesh = (la, side) => meshes.get(byKey.get(key(la, side)).id);
+  const seg = {}; const segMeshes = {};
+  for (const b of bones) { const s = segmentOf(b); (segMeshes[s] ??= []).push(meshes.get(b.id)); seg[b.id] = s; }
+
+  const P = {};
+  for (const [sd, name, sg] of [['R', 'pravá', -1], ['L', 'levá', 1]]) {
+    const fem = mesh('femur', name).geometry.boundingBox, tib = mesh('tibia', name), hum = mesh('humerus', name), rad = mesh('radius', name);
+    const medFem = sd === 'R' ? fem.max.x : fem.min.x;
+    P['hip' + sd] = new THREE.Vector3(medFem + sg * 2.4, fem.max.y - 3.0, (fem.min.z + fem.max.z) / 2);
+    const tb = tib.geometry.boundingBox, kc = bandCentroid(tib, 'top', 0.08);
+    P['knee' + sd] = new THREE.Vector3(kc.x, tb.max.y - 0.5, kc.y);
+    const ac = bandCentroid(tib, 'bottom', 0.08);
+    P['ankle' + sd] = new THREE.Vector3(ac.x, tb.min.y + 1.0, ac.y);
+    const hb = hum.geometry.boundingBox, medHum = sd === 'R' ? hb.max.x : hb.min.x;
+    P['shoulder' + sd] = new THREE.Vector3(medHum + sg * 2.3, hb.max.y - 2.3, (hb.min.z + hb.max.z) / 2);
+    const ec = bandCentroid(hum, 'bottom', 0.1);
+    P['elbow' + sd] = new THREE.Vector3(ec.x, hb.min.y + 1.0, ec.y);
+    const rb = rad.geometry.boundingBox, wc = bandCentroid(rad, 'bottom', 0.1);
+    P['wrist' + sd] = new THREE.Vector3(wc.x, rb.min.y + 1.0, wc.y);
+  }
+  const sac = mesh('os sacrum', 'střední').geometry.boundingBox, atl = mesh('atlas', 'střední').geometry.boundingBox;
+  P.waist = new THREE.Vector3(0, sac.max.y - 1.0, (sac.min.z + sac.max.z) / 2);
+  P.neck = new THREE.Vector3(0, (atl.min.y + atl.max.y) / 2, (atl.min.z + atl.max.z) / 2);
+  P.center = new THREE.Vector3(0, (P.hipR.y + P.hipL.y) / 2, (P.hipR.z + P.hipL.z) / 2);
+
+  // body chodidel, podle kterých se kostra drží země
+  const soles = { R: [], L: [] }; let groundY = Infinity;
+  for (const [s, list] of Object.entries(segMeshes)) {
+    if (!s.startsWith('foot')) continue;
+    for (const m of list) {
+      const bb = m.geometry.boundingBox; groundY = Math.min(groundY, bb.min.y);
+      soles[s.slice(-1)].push(new THREE.Vector3((bb.min.x + bb.max.x) / 2, bb.min.y, (bb.min.z + bb.max.z) / 2));
+    }
+  }
+  return { P, segMeshes, soles, groundY };
+}
+
+/* ---------- pózy ---------- */
+const SIDES = ['R', 'L'];
+const KEYS = ['tx', 'tz', 'ty', 'fz', 'rx', 'ry', 'rz', 'pTilt', 'pTwist', 'pRoll', 'lean', 'twist', 'roll', 'hNod', 'hTurn', 'hTilt',
+  ...SIDES.flatMap(s => ['abd', 'flex', 'shTw', 'elbZ', 'elbX', 'wrZ', 'wrX', 'hipFlex', 'hipAbd', 'hipTw', 'knee', 'ankle'].map(k => k + s))];
+const blank = () => Object.fromEntries(KEYS.map(k => [k, 0]));
+const lerpPose = (a, b, k) => { const o = {}; for (const key of KEYS) o[key] = a[key] + (b[key] - a[key]) * k; return o; };
+
+// Souřadnice: Y nahoru, +Z dopředu, pravá strana těla je -X. Kladné úhly: ruka a noha dopředu, koleno pokrčit, trup předklon.
+const PI2 = Math.PI * 2;
+
+const DANCES = {
+  wave: {
+    name: 'Zamávání', emoji: '👋', period: 2.4,
+    pose(t) {
+      const env = sm(0, 0.55, t) * (1 - sm(1.85, 2.4, t));
+      const w = Math.sin(PI2 * (t - 0.4) * 2.1) * env;
+      const sway = Math.sin(PI2 * t / 2.4);
+      const k = 5 + 3 * Math.sin(2 * PI2 * t / 2.4);
+      return {
+        abdR: 8 + 92 * env, flexR: 10 * env, elbZR: 88 * env + 30 * w, elbXR: 8 * env, wrZR: 16 * w,
+        abdL: 7 + 2 * sway, elbXL: 10, flexL: 4 * sway,
+        hTilt: 7 * env, hTurn: -10 * env, hNod: -3 * env + 2 * Math.sin(2 * PI2 * t / 2.4),
+        roll: 2.5 * sway, twist: -4 * env, pRoll: -2 * sway,
+        kneeR: k, kneeL: k, hipFlexR: k * 0.5, hipFlexL: k * 0.5, lean: 2,
+      };
+    },
+  },
+  jump: {
+    name: 'Skok', emoji: '🦘', period: 1.9,
+    pose(t) {
+      const crouch = sm(0.0, 0.42, t) * (1 - sm(0.42, 0.56, t)) + 0.75 * sm(1.1, 1.2, t) * (1 - sm(1.2, 1.6, t));
+      const u = Math.min(1, Math.max(0, (t - 0.56) / 0.55));
+      const air = t >= 0.56 && t <= 1.11;
+      const tuck = air ? Math.sin(Math.PI * u) * 0.55 : 0;
+      const up = sm(0.4, 0.62, t) * (1 - sm(1.05, 1.35, t));
+      const push = sm(0.4, 0.58, t) * (1 - sm(0.58, 0.9, t));
+      const hip = 68 * crouch + 38 * tuck, kn = 88 * crouch + 55 * tuck, an = 30 * crouch - 28 * push - 10 * tuck;
+      const arm = -28 * sm(0.05, 0.4, t) * (1 - sm(0.4, 0.5, t));
+      return {
+        ty: air ? 4 * 52 * u * (1 - u) : 0, fz: sm(0.5, 0.6, t) * (1 - sm(1.1, 1.2, t)),
+        hipFlexR: hip, hipFlexL: hip, kneeR: kn, kneeL: kn, ankleR: an, ankleL: an, lean: 28 * crouch + 8 * tuck,
+        flexR: arm + 40 * up, flexL: arm + 40 * up, abdR: 150 * up + 6, abdL: 150 * up + 6, elbXR: 10 + 25 * (1 - up), elbXL: 10 + 25 * (1 - up),
+        hNod: -10 * up + 12 * crouch, hipAbdR: 4 * tuck, hipAbdL: 4 * tuck,
+      };
+    },
+  },
+  backflip: {
+    name: 'Backflip', emoji: '🤸', period: 3.0,
+    pose(t) {
+      const c1 = sm(0.05, 0.5, t) * (1 - sm(0.5, 0.68, t));
+      const u = Math.min(1, Math.max(0, (t - 0.7) / 1.1));
+      const flight = t >= 0.7 && t <= 1.8;
+      const tuck = flight ? sm(0.1, 0.3, u) * (1 - sm(0.68, 0.86, u)) : 0;
+      const land = sm(1.78, 1.9, t) * (1 - sm(1.9, 2.45, t));
+      const cr = Math.max(c1, land * 0.8);
+      const up = sm(0.52, 0.72, t) * (1 - sm(1.35, 1.75, t));
+      const push = sm(0.62, 0.72, t) * (1 - sm(0.85, 1.1, t));
+      const hip = 75 * cr + 105 * tuck, kn = 95 * cr + 125 * tuck;
+      const flex = -45 * c1 + (1 - tuck) * 165 * up + 70 * tuck;
+      return {
+        ty: flight ? 4 * 65 * u * (1 - u) : 0, fz: sm(0.62, 0.72, t) * (1 - sm(1.76, 1.9, t)),
+        rx: -360 * sm(0.04, 0.92, u),
+        hipFlexR: hip, hipFlexL: hip, kneeR: kn, kneeL: kn, ankleR: 30 * cr - 35 * push, ankleL: 30 * cr - 35 * push,
+        lean: 30 * cr + 35 * tuck, flexR: flex, flexL: flex, abdR: 8, abdL: 8, elbXR: 80 * tuck + 10, elbXL: 80 * tuck + 10,
+        hNod: 25 * tuck + 8 * c1,
+      };
+    },
+  },
+  shuffle: {
+    name: 'Šafl', emoji: '🕺', period: 0.9,
+    pose(t) {
+      const s = Math.sin(PI2 * t / 0.9), bob = Math.abs(Math.sin(PI2 * t / 0.9));
+      return {
+        hipFlexR: 48 * pos(s) - 20 * pos(-s) + 10, hipFlexL: 48 * pos(-s) - 20 * pos(s) + 10,
+        kneeR: 88 * pos(s) + 16, kneeL: 88 * pos(-s) + 16,
+        ankleR: -10 * pos(-s), ankleL: -10 * pos(s),
+        flexR: -38 * s, flexL: 38 * s, elbXR: 88, elbXL: 88, abdR: 10, abdL: 10,
+        lean: 10, twist: 10 * s, roll: 3 * s, pRoll: -4 * s, pTwist: -6 * s,
+        hNod: 4 + 5 * bob, hTurn: 6 * s,
+      };
+    },
+  },
+};
+
+/* ---------- animátor ---------- */
+export function createDance(ctx) {
+  const { viewer } = ctx;
+  const root = $('#view-dance');
+  let rig = null, current = null, startedAt = 0, speed = 1, blendStart = 0, active = false, stage = null, shadow = null;
+  let shown = blank(), blendFrom = blank(), hold = null;      // hold: ladicí podržení jedné pózy
+  const REST = blank();
+
+  root.innerHTML = `
+    <p class="muted small">Vyber tanec. Kostru můžeš při tanci otáčet a přibližovat.</p>
+    <div class="dances" id="dances">${Object.entries(DANCES).map(([id, d]) => `<button class="dance-btn" type="button" data-d="${id}" aria-pressed="false"><span class="em" aria-hidden="true">${d.emoji}</span><span>${esc(d.name)}</span></button>`).join('')}</div>
+    <label class="field"><span>Rychlost: <b id="dance-speed-val">100 %</b></span><input type="range" id="dance-speed" min="50" max="160" step="5" value="100"></label>
+    <button class="btn block" type="button" id="dance-stop" disabled>Zastavit a postavit se</button>`;
+
+  const mat = new THREE.Matrix4(), tmpA = new THREE.Matrix4(), tmpB = new THREE.Matrix4(), q = new THREE.Quaternion(), v = new THREE.Vector3();
+  const AX = new THREE.Vector3(1, 0, 0), AY = new THREE.Vector3(0, 1, 0), AZ = new THREE.Vector3(0, 0, 1);
+  const qa = (axis, deg) => new THREE.Quaternion().setFromAxisAngle(axis, deg * D2R);
+  const euler = (x, y, z) => new THREE.Quaternion().setFromEuler(new THREE.Euler(x * D2R, y * D2R, z * D2R, 'YXZ'));
+
+  // matice segmentu: rodič x T(pivot) x R x T(-pivot)
+  function pivotM(parent, pivot, quat) {
+    tmpA.makeTranslation(pivot.x, pivot.y, pivot.z);
+    tmpB.makeRotationFromQuaternion(quat);
+    const out = new THREE.Matrix4().multiplyMatrices(parent, tmpA).multiply(tmpB);
+    tmpA.makeTranslation(-pivot.x, -pivot.y, -pivot.z);
+    return out.multiply(tmpA);
+  }
+
+  function limbs(parentPelvis, p, S) {
+    const M = {}; const P = rig.P;
+    for (const sd of SIDES) {
+      const sg = sd === 'R' ? -1 : 1;
+      M['thigh' + sd] = pivotM(parentPelvis, P['hip' + sd], qa(AZ, sg * p['hipAbd' + sd]).multiply(qa(AX, -p['hipFlex' + sd])).multiply(qa(AY, p['hipTw' + sd])));
+      M['shank' + sd] = pivotM(M['thigh' + sd], P['knee' + sd], qa(AX, p['knee' + sd]));
+      M['foot' + sd] = pivotM(M['shank' + sd], P['ankle' + sd], qa(AX, -p['ankle' + sd]));
+    }
+    return M;
+  }
+
+  function compute(p) {
+    const P = rig.P;
+    // 1. průchod: bez otočení těla zjistí, o kolik zvednout/spustit, aby nejnižší bod chodidel stál na zemi
+    const rootA = new THREE.Matrix4().makeTranslation(p.tx, 0, p.tz);
+    const pelA = pivotM(rootA, P.center, euler(p.pTilt, p.pTwist, p.pRoll));
+    const LA = limbs(pelA, p);
+    let low = Infinity;
+    for (const sd of SIDES) for (const pt of rig.soles[sd]) { v.copy(pt).applyMatrix4(LA['foot' + sd]); if (v.y < low) low = v.y; }
+    const Y = (1 - p.fz) * (rig.groundY - low) + p.ty;
+    // 2. průchod: celé tělo včetně otočení kolem středu pánve (salto)
+    const root = new THREE.Matrix4().makeTranslation(p.tx, Y, p.tz);
+    tmpA.makeTranslation(P.center.x, P.center.y, P.center.z); root.multiply(tmpA);
+    root.multiply(tmpB.makeRotationFromQuaternion(euler(p.rx, p.ry, p.rz)));
+    tmpA.makeTranslation(-P.center.x, -P.center.y, -P.center.z); root.multiply(tmpA);
+    const pel = pivotM(root, P.center, euler(p.pTilt, p.pTwist, p.pRoll));
+    const M = { pelvis: pel, ...limbs(pel, p) };
+    M.torso = pivotM(pel, P.waist, euler(p.lean, p.twist, p.roll));
+    M.head = pivotM(M.torso, P.neck, euler(p.hNod, p.hTurn, p.hTilt));
+    for (const sd of SIDES) {
+      const sg = sd === 'R' ? -1 : 1;
+      M['uarm' + sd] = pivotM(M.torso, P['shoulder' + sd], qa(AZ, sg * p['abd' + sd]).multiply(qa(AX, -p['flex' + sd])).multiply(qa(AY, p['shTw' + sd])));
+      M['farm' + sd] = pivotM(M['uarm' + sd], P['elbow' + sd], qa(AZ, sg * p['elbZ' + sd]).multiply(qa(AX, -p['elbX' + sd])));
+      M['hand' + sd] = pivotM(M['farm' + sd], P['wrist' + sd], qa(AZ, sg * p['wrZ' + sd]).multiply(qa(AX, -p['wrX' + sd])));
+    }
+    return { M, Y };
+  }
+
+  function apply(p) {
+    shown = p;
+    const { M, Y } = compute(p);
+    for (const [name, list] of Object.entries(rig.segMeshes)) {
+      const m = M[name]; if (!m) continue;
+      for (const mesh of list) { mesh.matrix.copy(m); mesh.matrixWorldNeedsUpdate = true; }
+    }
+    // stín na zemi: čím výš je pánev, tím je menší a světlejší
+    const k = 1 / (1 + Math.max(0, p.ty) / 60);
+    shadow.scale.setScalar(k); shadow.material.opacity = 0.55 * k;
+    shadow.position.x = rig.P.center.x + p.tx; shadow.position.z = rig.P.center.z + p.tz;
+  }
+
+  function setup() {
+    if (!rig) rig = buildRig(viewer.meshes);
+    for (const list of Object.values(rig.segMeshes)) for (const m of list) m.matrixAutoUpdate = false;
+    if (!stage) {
+      stage = new THREE.Mesh(new THREE.CircleGeometry(95, 64), new THREE.MeshBasicMaterial({ color: 0x7e8da8, transparent: true, opacity: 0.22, depthWrite: false }));
+      stage.rotation.x = -Math.PI / 2;
+      const c = document.createElement('canvas'); c.width = c.height = 128;
+      const g = c.getContext('2d'), gr = g.createRadialGradient(64, 64, 4, 64, 64, 62);
+      gr.addColorStop(0, 'rgba(0,0,0,.9)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
+      shadow = new THREE.Mesh(new THREE.CircleGeometry(30, 32), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false, opacity: 0.55 }));
+      shadow.rotation.x = -Math.PI / 2; shadow.renderOrder = -1; stage.renderOrder = -2;
+    }
+    stage.position.set(0, rig.groundY - 0.4, rig.P.center.z); shadow.position.set(0, rig.groundY - 0.3, rig.P.center.z);
+    viewer.scene.add(stage, shadow);
+    shown = blank(); blendFrom = blank(); apply(shown);
+    viewer.onFrame = onFrame;
+  }
+
+  function restore() {
+    if (!rig) return;
+    for (const list of Object.values(rig.segMeshes)) for (const m of list) { m.matrixAutoUpdate = true; m.position.set(0, 0, 0); m.quaternion.identity(); m.updateMatrix(); m.matrixWorldNeedsUpdate = true; }
+    if (stage) { viewer.scene.remove(stage, shadow); }
+    viewer.onFrame = null; viewer.requestRender();
+  }
+
+  // plynulý přechod mezi pózami: blendFrom -> cíl během 0,4 s
+  function onFrame(now) {
+    if (!active) return false;
+    if (hold) { apply(hold); return false; }
+    const sec = now / 1000, playing = !!current;
+    let target = REST;
+    if (playing) {
+      const d = DANCES[current], t = (((sec - startedAt) * speed) % d.period + d.period) % d.period;
+      target = { ...blank(), ...d.pose(t) };
+    }
+    const k = sm(0, 0.4, sec - blendStart);
+    apply(k < 1 ? lerpPose(blendFrom, target, k) : target);
+    return playing || k < 1;       // po postavení do klidu se vykreslování zastaví
+  }
+
+  function start(id) {
+    const sec = performance.now() / 1000;
+    hold = null; blendFrom = { ...shown }; current = id; startedAt = sec; blendStart = sec;
+    document.querySelectorAll('#dances .dance-btn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.d === id)));
+    $('#dance-stop').disabled = false;
+    viewer.requestRender();
+  }
+  function stopDance() {
+    if (!current) return;
+    blendFrom = { ...shown }; current = null; blendStart = performance.now() / 1000;
+    document.querySelectorAll('#dances .dance-btn').forEach(b => b.setAttribute('aria-pressed', 'false'));
+    $('#dance-stop').disabled = true; viewer.requestRender();
+  }
+
+  root.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b) start(b.dataset.d); });
+  $('#dance-stop', root).onclick = stopDance;
+  $('#dance-speed', root).oninput = e => { speed = e.target.value / 100; $('#dance-speed-val', root).textContent = e.target.value + ' %'; };
+
+  return {
+    enter() {
+      active = true; root.hidden = false;
+      viewer.setFocus(null); viewer.setMark(null); viewer.showAll(); viewer.setExplode(0); viewer.setGhost(false);
+      setup();
+      // kamera: celá postava i s prostorem pro skok
+      const c = rig.P.center, h = 280;
+      const tanV = Math.tan(THREE.MathUtils.degToRad(viewer.camera.fov / 2));
+      const dist = Math.max((h / 2) / tanV, (130 / 2) / (tanV * viewer.camera.aspect)) * 1.05;
+      viewer._flyTo(new THREE.Vector3(0, c.y + 30, c.z + dist), new THREE.Vector3(0, c.y + 30, c.z));
+      viewer.requestRender();
+    },
+    leave() { active = false; root.hidden = true; current = null; restore(); },
+    _debug: { get rig() { return rig; }, Y(id, t) { return compute({ ...blank(), ...DANCES[id].pose(t) }).Y; }, period: id => DANCES[id].period, start, show(id, t) { current = null; hold = { ...blank(), ...DANCES[id].pose(t) }; viewer.requestRender(); } },
+  };
+}

@@ -49,7 +49,7 @@ export class Viewer {
     this.focusId = null; this.focusKind = 'focus';
     this.markId = null; this.markKind = 'bad';
     this.explode = 0;
-    this.anims = new Set(); this._raf = 0;
+    this.anims = new Set(); this._raf = 0; this.onFrame = null;
     this.tapHandlers = [];
     this.onVisibility = () => {};
 
@@ -127,6 +127,7 @@ export class Viewer {
       if (t >= 1) { this.anims.delete(a); a.done?.(); } else again = true;
     }
     if (this.controls.update()) again = true;
+    if (this.onFrame && this.onFrame(now)) again = true;     // animace (tance)
     this._updateHullThickness();
     this.renderer.render(this.scene, this.camera);
     if (again) this.requestRender();

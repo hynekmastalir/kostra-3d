@@ -12,6 +12,12 @@ Po nasazení běží na: **https://hynekmastalir.github.io/kostra-3d/**
 2. Pushni do větve `main`. Workflow `.github/workflows/deploy.yml` aplikaci sestaví a nasadí.
 3. Jiný název repozitáře: změň výchozí `base` ve `vite.config.js` nebo sestav s `BASE_PATH=/muj-repozitar/ npm run build`.
 
+## Tance
+
+Záložka **Tance** rozpohybuje kostru: zamávání, skok, backflip a šafl. Model se skládá z pevných kostí, proto jsou kosti v `src/dance.js` rozdělené do segmentů
+(pánev, trup, hlava, paže a nohy po třech článcích) a otáčejí se kolem kloubů, které se spočítají z tvaru kostí. Pohyb je dopředná kinematika s vlastními choreografiemi,
+chodidla se drží země a při skoku a saltu se výška pánve řídí obloukem. Rychlost jde měnit posuvníkem. Další tanec přidáš do objektu `DANCES` (funkce `pose(t)` vrací úhly kloubů ve stupních).
+
 ## Instalace do telefonu (PWA)
 
 Aplikace se dá nainstalovat jako běžná a po první návštěvě běží i bez internetu (model kostry se uloží do telefonu).

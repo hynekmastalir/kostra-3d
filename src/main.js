@@ -73,9 +73,9 @@ async function init() {
     await viewer.load(import.meta.env.BASE_URL + 'models/kostra.glb', MODEL_BYTES, p => {
       bar.style.width = Math.round(p * 100) + '%'; text.textContent = `Načítám model kostry… ${Math.round(p * 100)} %`;
     });
-    const [{ createBrowse }, { createCards }, { createQuiz }] = await Promise.all([import('./browse.js'), import('./cards.js'), import('./quiz.js')]);
-    const modes = { browse: createBrowse(ctx), cards: createCards(ctx), quiz: createQuiz(ctx) };
-    modes.cards.leave(); modes.quiz.leave();
+    const [{ createBrowse }, { createCards }, { createQuiz }, { createDance }] = await Promise.all([import('./browse.js'), import('./cards.js'), import('./quiz.js'), import('./dance.js')]);
+    const modes = { browse: createBrowse(ctx), cards: createCards(ctx), quiz: createQuiz(ctx), dance: createDance(ctx) };
+    modes.cards.leave(); modes.quiz.leave(); modes.dance.leave();
     let snap = null;
 
     function setMode(m) {
@@ -94,7 +94,7 @@ async function init() {
     $('#tabs').addEventListener('click', e => { const b = e.target.closest('[data-mode]'); if (b) setMode(b.dataset.mode); });
     document.addEventListener('keydown', e => {
       if (e.target.matches('input, select, textarea') || e.ctrlKey || e.metaKey || e.altKey) return;
-      if (e.key === '1') setMode('browse'); else if (e.key === '2') setMode('cards'); else if (e.key === '3') setMode('quiz');
+      if (e.key === '1') setMode('browse'); else if (e.key === '2') setMode('cards'); else if (e.key === '3') setMode('quiz'); else if (e.key === '4') setMode('dance');
     });
     modes.browse.enter();
     $('#loading').classList.add('done');
