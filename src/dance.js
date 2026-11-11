@@ -94,9 +94,17 @@ const lerpPose = (a, b, k) => { const o = {}; for (const key of KEYS) o[key] = a
 // Souřadnice: Y nahoru, +Z dopředu, pravá strana těla je -X. Kladné úhly: ruka a noha dopředu, koleno pokrčit, trup předklon.
 const PI2 = Math.PI * 2;
 
+// sled póz, mezi kterými se přeskakuje v rytmu (rychlý přechod + podržení): základ popping a locking
+function mixSparse(a, b, k) { const o = {}; for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) o[key] = (a[key] || 0) + ((b[key] || 0) - (a[key] || 0)) * k; return o; }
+function stepped(list, t, T, snap = 0.12) {
+  const n = list.length, hit = T / n, idx = Math.floor(t / hit) % n, local = (t - Math.floor(t / hit) * hit) / hit;
+  return { pose: mixSparse(list[(idx - 1 + n) % n], list[idx], sm(0, snap, local)), pop: Math.exp(-local * 9), local };
+}
+const pulse = (t, t0, tau) => (t >= t0 ? Math.exp(-(t - t0) / tau) : 0);     // doznívající úder v čase t0
+
 const DANCES = {
   wave: {
-    name: 'Zamávání', emoji: '👋', period: 2.4,
+    group: 'basic', name: 'Zamávání', emoji: '👋', period: 2.4,
     pose(t) {
       const env = sm(0, 0.55, t) * (1 - sm(1.85, 2.4, t));
       const w = Math.sin(PI2 * (t - 0.4) * 2.1) * env;
@@ -112,7 +120,7 @@ const DANCES = {
     },
   },
   jump: {
-    name: 'Skok', emoji: '🦘', period: 1.9,
+    group: 'basic', name: 'Skok', emoji: '🦘', period: 1.9,
     pose(t) {
       const crouch = sm(0.0, 0.42, t) * (1 - sm(0.42, 0.56, t)) + 0.75 * sm(1.1, 1.2, t) * (1 - sm(1.2, 1.6, t));
       const u = Math.min(1, Math.max(0, (t - 0.56) / 0.55));
@@ -131,7 +139,7 @@ const DANCES = {
     },
   },
   backflip: {
-    name: 'Backflip', emoji: '🤸', period: 3.0,
+    group: 'basic', name: 'Backflip', emoji: '🤸', period: 3.0,
     pose(t) {
       const c1 = sm(0.05, 0.5, t) * (1 - sm(0.5, 0.68, t));
       const u = Math.min(1, Math.max(0, (t - 0.7) / 1.1));
@@ -153,7 +161,7 @@ const DANCES = {
     },
   },
   shuffle: {
-    name: 'Šafl', emoji: '🕺', period: 0.9,
+    group: 'basic', name: 'Šafl', emoji: '🕺', period: 0.9,
     pose(t) {
       const s = Math.sin(PI2 * t / 0.9), bob = Math.abs(Math.sin(PI2 * t / 0.9));
       return {
@@ -163,6 +171,89 @@ const DANCES = {
         flexR: -38 * s, flexL: 38 * s, elbXR: 88, elbXL: 88, abdR: 10, abdL: 10,
         lean: 10, twist: 10 * s, roll: 3 * s, pRoll: -4 * s, pTwist: -6 * s,
         hNod: 4 + 5 * bob, hTurn: 6 * s,
+      };
+    },
+  },
+
+  /* ---------- street dance styly ---------- */
+  hiphop: {
+    group: 'street', name: 'Hip-hop', emoji: '🎤', period: 2.667,
+    info: 'Hip-hop vznikl v 70. letech v newyorském Bronxu spolu s hudbou stejného jména. Základem je „bounce“: rytmické pohupování v kolenou na každou dobu a uvolněný „groove“ hrudníku a ramen.',
+    pose(t) {
+      const b = t / 0.6667, d = 0.5 + 0.5 * Math.cos(PI2 * b), sway = Math.sin(PI2 * b / 2), pump = Math.sin(PI2 * b);
+      return {
+        kneeR: 14 + 22 * d, kneeL: 14 + 22 * d, hipFlexR: 8 + 14 * d, hipFlexL: 8 + 14 * d, ankleR: 5 * d, ankleL: 5 * d,
+        lean: 6 + 7 * d, pRoll: 4 * sway, roll: -5 * sway, twist: 9 * sway, pTwist: -5 * sway,
+        flexR: 30 + 25 * pump, flexL: 30 - 25 * pump, elbXR: 82, elbXL: 82, abdR: 14, abdL: 14, wrXR: 10 * pump, wrXL: -10 * pump,
+        hNod: 6 * d, hTilt: 6 * sway, hTurn: 8 * sway,
+        hipAbdR: 10 * pos(Math.sin(PI2 * b / 4)), hipAbdL: 10 * pos(-Math.sin(PI2 * b / 4)),
+      };
+    },
+  },
+  popping: {
+    group: 'street', name: 'Popping', emoji: '🤖', period: 3.2,
+    info: 'Popping vznikl v 70. letech v Kalifornii (Fresno, Oakland). Tanečník v rytmu prudce stahuje svaly („pop“ nebo „hit“) a mezi údery drží pózu. Tak vznikají robotické pohyby („robot“) i další techniky v rámci popping.',
+    pose(t) {
+      const L = [
+        { hTurn: 30, abdR: 8, abdL: 8, lean: 3 },
+        { hTurn: -30, abdR: 90, elbZR: 90, abdL: 8, twist: -12 },
+        { flexR: 90, elbXR: 90, flexL: 90, elbXL: 90, lean: 8, hNod: 12 },
+        { hTurn: 35, abdL: 90, elbZL: 90, abdR: 12, twist: 12, hTilt: 10 },
+        { hTurn: -20, flexR: 90, abdR: 0, flexL: -40, twist: -15, lean: 4 },
+        { abdR: 90, abdL: 90, roll: 6, hNod: -6 },
+        { hTurn: 20, abdR: 90, elbZR: 90, abdL: 90, elbZL: -90, roll: -5 },
+        { hNod: 15, hTurn: -35, flexR: 90, elbXR: 120, abdL: 10, roll: -6, twist: 8 },
+      ];
+      const { pose, pop } = stepped(L, t, 3.2, 0.1);
+      return { ...pose, kneeR: 8 + 10 * pop, kneeL: 8 + 10 * pop, hipFlexR: 4 + 5 * pop, hipFlexL: 4 + 5 * pop, lean: (pose.lean || 0) + 4 * pop, hNod: (pose.hNod || 0) + 4 * pop };
+    },
+  },
+  locking: {
+    group: 'street', name: 'Locking', emoji: '🔒', period: 2.4,
+    info: 'Locking vznikl koncem 60. let v Los Angeles (Don Campbell, skupina The Lockers). „Lock“ je náhlé zastavení pohybu a podržení pózy. Typické jsou ukazování prstem, rotace zápěstí a pády na kolena („knee drop“).',
+    pose(t) {
+      const L = [
+        { flexR: 95, abdR: 12, elbXL: 100, abdL: 25, flexL: 10, hTurn: -25, lean: 8, kneeR: 20, kneeL: 20, hipFlexR: 10, hipFlexL: 10, roll: 4 },
+        { flexR: 90, flexL: 90, elbXR: 100, elbXL: 100, lean: 15, hNod: 10, kneeR: 30, kneeL: 30, hipFlexR: 20, hipFlexL: 20 },
+        { hipFlexR: 75, kneeR: 120, ankleR: -40, hipFlexL: 40, kneeL: 70, lean: 20, flexR: -30, flexL: 60, elbXL: 90, hTurn: 30, roll: -5 },
+        { abdL: 160, flexL: 10, abdR: 20, elbXR: 100, hTilt: -8, kneeR: 15, kneeL: 15, twist: 10, hTurn: 25 },
+      ];
+      const { pose, pop } = stepped(L, t, 2.4, 0.09);
+      const roll = Math.sin(PI2 * 5 * t);
+      return { ...pose, wrZR: 35 * roll, wrXR: 25 * Math.cos(PI2 * 5 * t), wrZL: -35 * roll, wrXL: 25 * Math.cos(PI2 * 5 * t),
+        kneeR: (pose.kneeR || 0) + 7 * pop, kneeL: (pose.kneeL || 0) + 7 * pop, lean: (pose.lean || 0) + 4 * pop };
+    },
+  },
+  breaking: {
+    group: 'street', name: 'Breaking', emoji: '🌀', period: 2.4,
+    info: 'Breaking (breakdance) vznikl v 70. letech v Bronxu na parties, kde DJ Kool Herc prodlužoval „break“, instrumentální část písně. Tanečník začíná „toprockem“, tancem ve stoje (zde ukázka s „Indian step“), a pak přechází k zemi. V roce 2024 byl poprvé na olympijských hrách.',
+    pose(t) {
+      const ph = PI2 * t / 2.4, s = Math.sin(ph), c = Math.cos(ph), bob = 0.5 + 0.5 * Math.cos(2 * ph);
+      return {
+        lean: 24, kneeR: 30 + 14 * bob, kneeL: 30 + 14 * bob, hipFlexR: 22 + 10 * bob, hipFlexL: 22 + 10 * bob,
+        // překročení nohou: noha, která právě stoupá, se zvedá a překříží dopředu
+        hipAbdR: -24 * pos(s), hipAbdL: -24 * pos(-s), hipFlexR: 22 + 45 * pos(s), hipFlexL: 22 + 45 * pos(-s),
+        flexR: -40 * s + 20, flexL: 40 * s + 20, elbXR: 75, elbXL: 75, abdR: 22, abdL: 22,
+        twist: 16 * s, pTwist: -10 * s, roll: 4 * c, hNod: 5 * bob, hTurn: -10 * s, pRoll: 5 * s,
+      };
+    },
+  },
+  krump: {
+    group: 'street', name: 'Krump', emoji: '💥', period: 2.0,
+    info: 'Krump vznikl na začátku 2000. let v South Central v Los Angeles. Je to expresivní, silový tanec plný úderů rukama, dupání a prudkých „chest popů“ (zášklby hrudníku). Tanečníci v něm vyjadřují silné emoce.',
+    pose(t) {
+      const lift = (a, b) => (t >= a && t < b ? Math.pow(Math.sin(Math.PI * (t - a) / (b - a)), 0.7) : 0);
+      const liftR = lift(0, 0.45), liftL = lift(1.0, 1.45);
+      const H = pulse(t, 0.45, 0.1) + pulse(t, 0.95, 0.1) + pulse(t, 1.45, 0.1) + pulse(t, 1.95, 0.1);
+      const up1 = sm(0.5, 0.75, t) * (1 - sm(0.82, 0.95, t)), up2 = sm(1.5, 1.72, t) * (1 - sm(1.8, 1.95, t));
+      const hitA = pulse(t, 0.95, 0.12), hitB = pulse(t, 1.95, 0.12);
+      return {
+        kneeR: 28 + 100 * liftR + 18 * pulse(t, 0.45, 0.12), kneeL: 28 + 100 * liftL + 18 * pulse(t, 1.45, 0.12),
+        hipFlexR: 18 + 72 * liftR, hipFlexL: 18 + 72 * liftL, hipAbdR: 14, hipAbdL: 14, ankleR: -10 * liftR, ankleL: -10 * liftL,
+        lean: 22 - 16 * H, hNod: 12 - 14 * H, twist: 14 * Math.sin(PI2 * t / 2.0), roll: 4 * Math.sin(PI2 * t),
+        flexR: 35 + 105 * up1 - 45 * hitA + 60 * up2 - 40 * hitB, flexL: 35 + 105 * up1 - 45 * hitA,
+        abdR: 18 + 40 * up2, abdL: 18, elbXR: 100 - 60 * up1, elbXL: 100 - 60 * up1, shTwR: 0,
+        pRoll: 6 * Math.sin(PI2 * t / 1.0), hTilt: 8 * H, hTurn: 14 * Math.sin(PI2 * t / 2.0),
       };
     },
   },
@@ -176,9 +267,14 @@ export function createDance(ctx) {
   let shown = blank(), blendFrom = blank(), hold = null;      // hold: ladicí podržení jedné pózy
   const REST = blank();
 
+  const btn = (id, d) => `<button class="dance-btn" type="button" data-d="${id}" aria-pressed="false"><span class="em" aria-hidden="true">${d.emoji}</span><span>${esc(d.name)}</span></button>`;
   root.innerHTML = `
     <p class="muted small">Vyber tanec. Kostru můžeš při tanci otáčet a přibližovat.</p>
-    <div class="dances" id="dances">${Object.entries(DANCES).map(([id, d]) => `<button class="dance-btn" type="button" data-d="${id}" aria-pressed="false"><span class="em" aria-hidden="true">${d.emoji}</span><span>${esc(d.name)}</span></button>`).join('')}</div>
+    <h3 class="dgroup">Základní pohyby</h3>
+    <div class="dances" id="dances">${Object.entries(DANCES).filter(([, d]) => d.group === 'basic').map(([id, d]) => btn(id, d)).join('')}</div>
+    <h3 class="dgroup">Street dance styly</h3>
+    <div class="dances street" id="dances-street">${Object.entries(DANCES).filter(([, d]) => d.group === 'street').map(([id, d]) => btn(id, d)).join('')}</div>
+    <div class="dance-info" id="dance-info" hidden></div>
     <label class="field"><span>Rychlost: <b id="dance-speed-val">100 %</b></span><input type="range" id="dance-speed" min="50" max="160" step="5" value="100"></label>
     <button class="btn block" type="button" id="dance-stop" disabled>Zastavit a postavit se</button>
     <div class="row scatter-row">
@@ -414,7 +510,7 @@ export function createDance(ctx) {
     const idle = !phys, falling = phys && phys.mode === 'fall';
     $('#dance-scatter').disabled = !idle;
     $('#dance-assemble').disabled = !falling;
-    document.querySelectorAll('#dances .dance-btn').forEach(b => { b.disabled = !idle; });
+    document.querySelectorAll('#view-dance .dance-btn').forEach(b => { b.disabled = !idle; });
     $('#dance-stop').disabled = !(idle && current);
     $('#dance-hint').textContent = !phys ? 'Rozsypání: kosti se uvolní, spadnou a zůstanou ležet na zemi. Složit je zase přivolá zpátky.'
       : phys.mode === 'fall' ? 'Kosti leží na zemi. Můžeš se kolem nich otáčet a přibližovat. Tlačítkem Složit je přivoláš zpátky.' : 'Kosti se skládají…';
@@ -440,15 +536,21 @@ export function createDance(ctx) {
     if (phys) return;
     const sec = performance.now() / 1000;
     hold = null; blendFrom = { ...shown }; current = id; startedAt = sec; blendStart = sec;
-    document.querySelectorAll('#dances .dance-btn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.d === id)));
+    document.querySelectorAll('#view-dance .dance-btn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.d === id)));
     $('#dance-stop').disabled = false;
+    showInfo(id);
     viewer.requestRender();
+  }
+  function showInfo(id) {
+    const el = $('#dance-info'), d = id && DANCES[id];
+    el.hidden = !(d && d.info);
+    if (d && d.info) el.textContent = d.info;
   }
   function stopDance() {
     if (!current) return;
     blendFrom = { ...shown }; current = null; blendStart = performance.now() / 1000;
-    document.querySelectorAll('#dances .dance-btn').forEach(b => b.setAttribute('aria-pressed', 'false'));
-    $('#dance-stop').disabled = true; viewer.requestRender();
+    document.querySelectorAll('#view-dance .dance-btn').forEach(b => b.setAttribute('aria-pressed', 'false'));
+    $('#dance-stop').disabled = true; showInfo(null); viewer.requestRender();
   }
 
   root.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b) start(b.dataset.d); });

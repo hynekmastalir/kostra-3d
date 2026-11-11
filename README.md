@@ -16,7 +16,7 @@ Po nasazení běží na: **https://hynekmastalir.github.io/kostra-3d/**
 
 Záložka **Tance** rozpohybuje kostru: zamávání, skok, backflip a šafl. Model se skládá z pevných kostí, proto jsou kosti v `src/dance.js` rozdělené do segmentů
 (pánev, trup, hlava, paže a nohy po třech článcích) a otáčejí se kolem kloubů, které se spočítají z tvaru kostí. Pohyb je dopředná kinematika s vlastními choreografiemi,
-chodidla se drží země a při skoku a saltu se výška pánve řídí obloukem. Rychlost jde měnit posuvníkem. Tlačítko **Rozsypat** uvolní kosti jednu po druhé: každá je tuhé těleso s gravitací, odrazem a třením (viz `scatter()` v `src/dance.js`), kosti spadnou na zem a zůstanou ležet v hromadě. **Složit** je přivolá zpátky přesně na původní místa. Další tanec přidáš do objektu `DANCES` (funkce `pose(t)` vrací úhly kloubů ve stupních).
+chodidla se drží země a při skoku a saltu se výška pánve řídí obloukem. Rychlost jde měnit posuvníkem. Tlačítko **Rozsypat** uvolní kosti jednu po druhé: každá je tuhé těleso s gravitací, odrazem a třením (viz `scatter()` v `src/dance.js`), kosti spadnou na zem a zůstanou ležet v hromadě. **Složit** je přivolá zpátky přesně na původní místa. Základní pohyby jsou zamávání, skok, backflip a šafl. Street dance styly jsou **hip-hop** (bounce a groove), **popping** (prudké „hity“ a robot), **locking** (ukazování, zámky, pády na kolena), **breaking** (toprock, Indian step) a **krump** (dupání, údery rukou, zášklby hrudníku). U každého stylu se po výběru zobrazí krátký popis původu a znaků. Další tanec přidáš do objektu `DANCES` (funkce `pose(t)` vrací úhly kloubů ve stupních).
 
 ## Instalace do telefonu (PWA)
 

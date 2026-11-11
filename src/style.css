@@ -178,3 +178,8 @@ input[type=range] { width: 100%; min-height: var(--tap); accent-color: var(--acc
 
 .scatter-row{margin-top:10px}
 .dance-btn[disabled]{opacity:.5}
+
+.dgroup{font-size:.8rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:14px 0 0}
+.dances.street{grid-template-columns:repeat(2,1fr)}
+.dances.street .dance-btn{min-height:72px}
+.dance-info{margin:10px 0;padding:10px 12px;border-radius:10px;background:var(--accent-soft);color:var(--text);font-size:.92rem;line-height:1.45}
