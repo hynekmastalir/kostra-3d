@@ -6,6 +6,12 @@
 <title>Kostra 3D – učení kostí</title>
 <meta name="description" content="Interaktivní 3D model lidské kostry s českými názvy kostí. Prohlížeč, kartičky a testy.">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#12161c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kostra 3D">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E%F0%9F%A6%B4%3C/text%3E%3C/svg%3E">
 <script>
   // nastavení motivu před vykreslením, aby neblikalo
@@ -21,6 +27,7 @@
       <button role="tab" data-mode="cards" aria-selected="false">Kartičky</button>
       <button role="tab" data-mode="quiz" aria-selected="false">Test</button>
     </nav>
+    <button id="install" class="chip-btn install" hidden title="Nainstalovat aplikaci do telefonu">⬇ Instalovat</button>
     <button id="theme" class="icon-btn" aria-label="Přepnout tmavý a světlý režim" title="Tmavý / světlý režim"></button>
   </header>
 

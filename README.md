@@ -12,6 +12,16 @@ Po nasazení běží na: **https://hynekmastalir.github.io/kostra-3d/**
 2. Pushni do větve `main`. Workflow `.github/workflows/deploy.yml` aplikaci sestaví a nasadí.
 3. Jiný název repozitáře: změň výchozí `base` ve `vite.config.js` nebo sestav s `BASE_PATH=/muj-repozitar/ npm run build`.
 
+## Instalace do telefonu (PWA)
+
+Aplikace se dá nainstalovat jako běžná a po první návštěvě běží i bez internetu (model kostry se uloží do telefonu).
+
+- **Android (Chrome):** otevři stránku a klepni na tlačítko **Instalovat** v záhlaví, nebo v menu prohlížeče na „Nainstalovat aplikaci“ či „Přidat na plochu“.
+- **iPhone (Safari):** klepni na **Sdílet** a vyber **Přidat na plochu**.
+- **Počítač (Chrome, Edge):** ikona instalace v adresním řádku.
+
+Nová verze se stáhne sama při dalším spuštění s připojením. Postup uložení do telefonu je řešen service workerem (`vite-plugin-pwa`, nastavení ve `vite.config.js`).
+
 ## Vývoj
 
 ```

@@ -18,6 +18,21 @@ $('#theme').onclick = () => { const next = isDark() ? 'light' : 'dark'; root.dat
 mq.addEventListener('change', () => paintTheme());
 paintTheme();
 
+// ---------- instalace aplikace (PWA) ----------
+// Prohlížeč nabídne instalaci událostí beforeinstallprompt; na iPhonu (Safari) se instaluje přes Sdílet > Přidat na plochu.
+let installEvt = null;
+const installBtn = $('#install');
+const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; if (!standalone) installBtn.hidden = false; });
+window.addEventListener('appinstalled', () => { installBtn.hidden = true; installEvt = null; });
+if (!standalone && /iphone|ipad|ipod/i.test(navigator.userAgent) && !navigator.standalone) {
+  installBtn.hidden = false; installBtn.textContent = '⬇ Na plochu';
+}
+installBtn.onclick = async () => {
+  if (installEvt) { installEvt.prompt(); await installEvt.userChoice.catch(() => {}); installEvt = null; installBtn.hidden = true; }
+  else alert('Na iPhonu: klepni na tlačítko Sdílet (čtverec se šipkou) a vyber „Přidat na plochu“.');
+};
+
 // ---------- spodní panel (mobil) ----------
 const panel = $('#panel'), handle = $('#sheet-handle');
 function setSheet(open) { panel.dataset.sheet = open ? 'open' : 'closed'; handle.setAttribute('aria-expanded', String(open)); }
