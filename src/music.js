@@ -82,6 +82,13 @@ export const SONGS = {
     bass: { root: ['C2', 'G1', 'A1', 'F1'], p: 'r.r.o.r.r.r.o.r.', third: 4, wave: 'sawtooth' },
     lead: ['G5 . E5 . G5 . A5 . G5 . E5 . D5 . . .', 'F5 . D5 . F5 . G5 . F5 . D5 . B4 . . .', 'E5 . C5 . E5 . F5 . E5 . C5 . A4 . . .', 'F5 . A5 . G5 . F5 . E5 . D5 . C5 . . .'], leadVoice: 'bell',
   },
+  afro: {
+    label: 'afrobeats, 104 BPM', bpm: 104, bars: 4, swing: 0.1,
+    drums: { kick: 'x..x..x...x..x..', clap: '....x.......x...', ghost: '.......o.....o.o', hat: 'x.x.x.x.x.x.x.x.', shaker: 'xxxxxxxxxxxxxxxx', cow: 'x..x..x...x.x...' },
+    chords: [{ n: ['A3', 'C4', 'E4'] }, { n: ['F3', 'A3', 'C4'] }, { n: ['C4', 'E4', 'G4'] }, { n: ['G3', 'B3', 'D4'] }].map(c => ({ ...c, r: 'x..x..x...x..x..' })), chordVoice: 'rhodes',
+    bass: { root: ['A1', 'F1', 'C2', 'G1'], p: 'r..r..o...r..f..', third: 4, wave: 'sine' },
+    lead: ['E5 . . G5 . A5 . . G5 . E5 . . . . .', 'C5 . . F5 . A5 . . G5 . F5 . . . . .', 'E5 . . G5 . C6 . . B5 . G5 . . . . .', 'D5 . . G5 . B5 . . A5 . G5 . . . . .'], leadVoice: 'pluck',
+  },
 };
 
 /* ---------- syntéza ---------- */

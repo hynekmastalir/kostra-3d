@@ -384,6 +384,54 @@ const ojFinal = u => {
   };
 };
 
+/* ---------- Afro (afrobeats, 104 BPM): Shaku Shaku, Azonto, Gwara Gwara a Zanku ---------- */
+const afShaku = u => {   // malé rychlé krůčky, pokrčená kolena, předklon a prudké kmitání pokrčených paží vpřed a vzad
+  const s = Math.sin(Math.PI * u), c = Math.cos(Math.PI * u), d = 0.5 + 0.5 * Math.cos(PI2 * u * 2), s2 = Math.sin(PI2 * u * 2);
+  return {
+    kneeR: 34 + 22 * pos(s), kneeL: 34 + 22 * pos(-s), hipFlexR: 22 + 22 * pos(s), hipFlexL: 22 + 22 * pos(-s), hipAbdR: 8, hipAbdL: 8,
+    tx: -4 * s, ty: 1.5 * d, pRoll: 5 * s, roll: -4 * s, lean: 20, pTwist: -10 * s, twist: 10 * s,
+    flexR: 40 + 55 * s, flexL: 40 - 55 * s, elbXR: 95 + 15 * c, elbXL: 95 - 15 * c, abdR: 14, abdL: 14, shTwR: 20 * c, shTwL: -20 * c, wrXR: 18 * s2, wrXL: -18 * s2,
+    hNod: 8 - 6 * d, hTilt: 6 * s, hTurn: 10 * s,
+  };
+};
+const afAzonto = u => {  // volný groove, pantomima rukou u obličeje („telefon“, „česání“), pohyb boků a švih bérce dozadu
+  const s = Math.sin(Math.PI * u), c = Math.cos(Math.PI * u), d = 0.5 + 0.5 * Math.cos(PI2 * u), q = Math.sin(PI2 * u / 4);
+  return {
+    kneeR: 30 + 10 * d + 55 * pulse(((u % 2) + 2) % 2, 1, 0.14), kneeL: 30 + 10 * d, hipFlexR: 18 - 14 * pulse(((u % 2) + 2) % 2, 1, 0.14), hipFlexL: 18,
+    tx: 6 * q, ty: 1.2 * d, pRoll: 8 * s, roll: -6 * s, pTwist: 14 * s, twist: -10 * s, lean: 10 + 4 * d,
+    flexR: 105 + 15 * c, elbXR: 120 - 20 * c, abdR: 18, shTwR: -30, wrZR: 18 * s,
+    flexL: 45 - 40 * s, elbXL: 80 + 40 * pos(s), abdL: 28 + 22 * pos(-s), wrZL: -14 * c,
+    hTilt: 14 * s, hTurn: 14 * c, hNod: 6 * d,
+  };
+};
+const afGwara = u => {   // široký podřep, váha na jedné noze, druhá noha švihá, paže kreslí oblouk přes tělo
+  const w = Math.sin(Math.PI * u / 2), R = pos(w), L = pos(-w), a = Math.abs(w), s = Math.sin(Math.PI * u);
+  return {
+    tx: -10 * w, kneeR: 48 + 12 * R - 6 * L, kneeL: 48 + 12 * L - 6 * R, hipFlexR: 38 + 14 * R, hipFlexL: 38 + 14 * L, hipAbdR: 26 + 8 * R, hipAbdL: 26 + 8 * L,
+    lean: 24, pRoll: 6 * w, roll: -8 * w, pTwist: -22 * w, twist: 16 * w,
+    flexR: 40 + 70 * L - 10 * R, abdR: 24 + 60 * L, elbXR: 50 + 40 * R, flexL: 40 + 70 * R - 10 * L, abdL: 24 + 60 * R, elbXL: 50 + 40 * L,
+    shTwR: 25 * w, shTwL: 25 * w, wrZR: 16 * s, wrZL: 16 * s, hTilt: 10 * w, hNod: 8 * a, hTurn: -12 * w,
+  };
+};
+const afZanku = u => {   // rychlé nohy (legwork): střídavé kopy a švihy bérců na půldobu, paže volně mávají
+  const x = ((u % 1) + 1) % 1, k = Math.sin(PI2 * u), s = Math.sin(Math.PI * u), hop = 3 * Math.sin(Math.PI * ((u * 2) % 1));
+  const fR = pos(Math.sin(PI2 * u)), fL = pos(-Math.sin(PI2 * u));
+  return {
+    ty: hop, kneeR: 28 + 62 * fR, kneeL: 28 + 62 * fL, hipFlexR: 24 + 38 * fR, hipFlexL: 24 + 38 * fL, hipAbdR: 10 + 12 * fR, hipAbdL: 10 + 12 * fL,
+    tx: 5 * s, pRoll: 8 * k, roll: -6 * k, pTwist: 14 * k, twist: -12 * k, lean: 12,
+    flexR: 60 + 40 * k, flexL: 60 - 40 * k, elbXR: 80 + 30 * k, elbXL: 80 - 30 * k, abdR: 22, abdL: 22, wrXR: 26 * Math.sin(PI2 * u * 2), wrXL: -26 * Math.sin(PI2 * u * 2),
+    hNod: 8, hTilt: 8 * k,
+  };
+};
+const afPose = u => {
+  const k = sm(0.2, 1.2, u), s2 = Math.sin(PI2 * u * 2);
+  return {
+    kneeR: 24, kneeL: 24 + 12 * k, hipFlexR: 12, hipFlexL: 12 + 6 * k, hipAbdR: 14, hipAbdL: 14, lean: 4, roll: 6 * k, pRoll: 6 * k,
+    abdR: 20 + 120 * k, abdL: 20 + 120 * k, elbXR: 40 * (1 - k) + 18, elbXL: 40 * (1 - k) + 18, flexR: 20, flexL: 20, shTwR: 20 * s2 * k, shTwL: -20 * s2 * k, hTilt: 10 * k, hNod: -6 * k,
+    ty: 1.5 * Math.abs(s2) * k,
+  };
+};
+
 /* ====================== tance ====================== */
 function dance(o, build) {
   const B = 60 / o.bpm, P = (n, beats, fn, blend = 1) => ({ n, d: beats * B, b: blend * B, p: tl => fn(tl / B, tl) });
@@ -430,4 +478,8 @@ export const DANCES = {
     const loop = [['Zkřížené ruce a twist', ojCross], ['Široké švihy paží', ojWide], ['Ruce nad hlavou', ojUp], ['Výpad do strany', ojLunge]];
     return [...loop, ...loop, ...loop].map(([n, f]) => P(n, 4, f, 0.7)).concat([P('Finální póza', 5, ojFinal, 0.7)]);
   }),
+  afro: dance({ group: 'pop', name: 'Afro', emoji: '🌍', bpm: 104, song: 'afro', color: '#eab308', lag: 0.05,
+    info: 'Afro dance (afrobeats) vznikl v západní Africe, hlavně v Nigérii a Ghaně, a v 2010s se rozšířil světem. Sestava skládá čtyři slavné kroky: Shaku Shaku (malé kroky v předklonu a pokrčené paže, Nigérie), Azonto (volný groove s pantomimou rukou, Ghana), Gwara Gwara (široký podřep, švih nohy a paže v oblouku, Jižní Afrika) a Zanku (rychlé nohy, tzv. legwork). Je to zjednodušená stylizace kostry podle popisů těchto kroků, hudba je moje originální afrobeats skladba.',
+    tell: 'uvolněný předklon, kroky v pokrčených kolenou, pantomima rukou a rychlé nohy' },
+  (P) => [P('Shaku Shaku', 8, afShaku), P('Azonto', 8, afAzonto), P('Gwara Gwara', 8, afGwara), P('Zanku', 8, afZanku), P('Shaku Shaku', 8, afShaku), P('Azonto', 8, afAzonto), P('Gwara Gwara', 8, afGwara), P('Zanku', 8, afZanku), P('Póza', 5, afPose)]),
 };
