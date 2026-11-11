@@ -340,34 +340,47 @@ const krumpHop = u => {
   };
 };
 
-/* ---------- Orange Justice (128 BPM): twist nohou, střídavé švihy rukou, poskoky, kruhy rukou ---------- */
-const ojTwist = u => {
+/* ---------- Orange Justice (≈162 BPM, smyčka 16 dob): podle videa ----------
+   1) zkřížené ruce před hrudí + točení špiček (twist), 2) široké švihy rukou do stran v širokém stoji,
+   3) ruce nad hlavou a pumpování kolen, 4) hluboký výpad do strany se švihem paží, střídavě vpravo a vlevo. */
+const ojCross = u => {
   const s = Math.sin(Math.PI * u), c = Math.cos(Math.PI * u), d = 0.5 + 0.5 * Math.cos(PI2 * u);
   return {
-    kneeR: 30 + 10 * d, kneeL: 30 + 10 * d, hipFlexR: 18 + 6 * d, hipFlexL: 18 + 6 * d, hipTwR: 26 * s, hipTwL: 26 * s, pTwist: 22 * s, twist: -18 * s, lean: 10,
-    flexR: 68 * s, flexL: -68 * s, abdR: 14, abdL: 14, elbXR: 100, elbXL: 100, wrXR: 18 * c, wrXL: -18 * c, hTurn: -20 * s, hNod: 6 * d, roll: 4 * s, hTilt: 6 * c,
+    kneeR: 36 + 10 * d, kneeL: 36 + 10 * d, hipFlexR: 20, hipFlexL: 20, hipAbdR: 12, hipAbdL: 12, hipTwR: 24 * s, hipTwL: 24 * s, pTwist: 26 * s, twist: -18 * s, lean: 12,
+    flexR: 72 + 8 * s, flexL: 72 - 8 * s, abdR: -32 - 10 * s, abdL: -32 + 10 * s, elbXR: 100, elbXL: 100, wrXR: 14 * c, wrXL: -14 * c, hTurn: -14 * s, hNod: 6 * d, hTilt: 5 * c, roll: 3 * s,
+    ty: 1.2 * d,
   };
 };
-const ojHop = u => {
-  const s = Math.sin(Math.PI * u), x = ((u % 1) + 1) % 1, hop = 4 * 6 * x * (1 - x);
+const ojWide = u => {
+  const s = Math.sin(Math.PI * u), d = 0.5 + 0.5 * Math.cos(PI2 * u);
   return {
-    tx: -8 * s, ty: hop, fz: sm(0, 0.15, x) * (1 - sm(0.85, 1, x)), kneeR: 30 + 14 * pos(s), kneeL: 30 + 14 * pos(-s), hipFlexR: 18, hipFlexL: 18, hipAbdR: 12 * pos(s), hipAbdL: 12 * pos(-s), pRoll: 7 * s, roll: -9 * s,
-    abdR: 20 + 125 * pos(s), abdL: 20 + 125 * pos(-s), elbXR: 25, elbXL: 25, wrZR: 25 * Math.sin(PI2 * u * 2) * pos(s), wrZL: -25 * Math.sin(PI2 * u * 2) * pos(-s), lean: 8, hTilt: 10 * s, hTurn: 12 * s,
+    kneeR: 44 + 10 * d, kneeL: 44 + 10 * d, hipFlexR: 26, hipFlexL: 26, hipAbdR: 24, hipAbdL: 24, hipTwR: 12 * s, hipTwL: 12 * s, pTwist: 14 * s, pRoll: 6 * s, lean: 16, tx: -7 * s,
+    abdR: 70 + 45 * s, abdL: 70 - 45 * s, flexR: 12 + 12 * pos(-s), flexL: 12 + 12 * pos(s), elbXR: 18 + 40 * pos(-s), elbXL: 18 + 40 * pos(s), wrZR: 18 * s, wrZL: 18 * s,
+    hTilt: 9 * s, hNod: 6 * d, twist: -12 * s,
   };
 };
-const ojWindmill = u => {
-  const a = PI2 * u / 2, d = 0.5 + 0.5 * Math.cos(PI2 * u);
+const ojUp = u => {
+  const s = Math.sin(Math.PI * u), d = 0.5 + 0.5 * Math.cos(PI2 * u), ar = sm(0, 0.8, u) * (1 - sm(3.6, 4, u) * 0.0);
   return {
-    kneeR: 28 + 12 * d, kneeL: 28 + 12 * d, hipFlexR: 16, hipFlexL: 16, pTwist: 14 * Math.sin(a), twist: -10 * Math.sin(a), lean: 10,
-    flexR: 90 + 85 * Math.sin(a), flexL: 90 + 85 * Math.sin(a + Math.PI), elbXR: 70 + 45 * Math.cos(a), elbXL: 70 + 45 * Math.cos(a + Math.PI), abdR: 12, abdL: 12, hNod: 5 * d, hTilt: 6 * Math.sin(a), pRoll: 4 * Math.cos(a),
+    kneeR: 32 + 14 * d, kneeL: 32 + 14 * d, hipFlexR: 18, hipFlexL: 18, hipAbdR: 14, hipAbdL: 14, hipTwR: 14 * s, hipTwL: 14 * s, pTwist: 12 * s, lean: 4, ty: 2 * d,
+    abdR: 20 + 125 * ar, abdL: 20 + 125 * ar, flexR: 20 + 20 * ar + 14 * s, flexL: 20 + 20 * ar - 14 * s, elbXR: 25 + 30 * pos(s) * ar, elbXL: 25 + 30 * pos(-s) * ar,
+    wrZR: 28 * s, wrZL: -28 * s, hNod: -6 * ar, hTilt: 7 * s, roll: 3 * s,
   };
 };
-const ojFinish = u => {
-  const sp = sm(0.8, 3.8, u), pose = sm(4.2, 5.0, u), d = 0.5 + 0.5 * Math.cos(PI2 * u);
+const ojLunge = u => {
+  const w = Math.sin(Math.PI * u / 2), R = pos(w), L = pos(-w), a = Math.abs(w), s = Math.sin(Math.PI * u);
   return {
-    ry: 360 * sp, sp: -1 * (1 - pose), kneeR: 16 + 18 * d, kneeL: 16 + 18 * d, hipFlexL: 70 * Math.sin(Math.PI * Math.min(1, sp * 1.1)) * (1 - pose),
-    abdR: 14 + 130 * pose, abdL: 14 + 130 * pose, elbXR: 100 * (1 - pose), elbXL: 100 * (1 - pose), flexR: 30 * (1 - pose), flexL: 30 * (1 - pose), hipAbdR: 14 * pose, hipAbdL: 14 * pose, lean: 6 - 8 * pose,
-    hTilt: 8 * pose, hNod: -8 * pose, roll: 3 * pose * Math.sin(PI2 * u / 2),
+    tx: -16 * w, ty: 0, kneeR: 40 + 20 * R - 12 * L, kneeL: 40 + 20 * L - 12 * R, hipFlexR: 24, hipFlexL: 24, hipAbdR: 24 + 6 * R - 4 * L, hipAbdL: 24 + 6 * L - 4 * R,
+    pRoll: -8 * w, roll: 10 * w, lean: 14 + 8 * a, pTwist: -16 * w, twist: 14 * w, rz: 0,
+    abdR: 40 + 70 * R - 10 * L, abdL: 40 + 70 * L - 10 * R, flexR: 30 + 30 * L, flexL: 30 + 30 * R, elbXR: 40 + 20 * L, elbXL: 40 + 20 * R, wrZR: 20 * s, wrZL: -20 * s,
+    hTilt: 14 * w, hNod: 8 * a, hTurn: -10 * w,
+  };
+};
+const ojFinal = u => {
+  const k = sm(0.3, 1.4, u), d = 0.5 + 0.5 * Math.cos(PI2 * u);
+  return {
+    kneeR: 30 - 12 * k + 10 * d * (1 - k), kneeL: 30 - 12 * k + 10 * d * (1 - k), hipFlexR: 16, hipFlexL: 16, hipAbdR: 20 * k, hipAbdL: 20 * k, lean: -6 * k,
+    abdR: 20 + 125 * k, abdL: 20 + 125 * k, elbXR: 30 * (1 - k), elbXL: 30 * (1 - k), flexR: 25, flexL: 25, hNod: -10 * k, hTilt: 8 * k * Math.sin(PI2 * u / 2), ty: 3 * Math.sin(PI2 * u / 2) * k,
   };
 };
 
@@ -410,8 +423,11 @@ export const DANCES = {
     info: 'Krump vznikl na začátku 2000. let v South Central v Los Angeles. Je to expresivní, silový tanec plný úderů rukama, dupání a prudkých zášklbů hrudníku. Sestava: dupnutí, údery hrudníku, „buck“ a poskoky.',
     tell: 'nízký agresivní postoj, dupání, prudké údery rukou a hrudníku' },
   (P) => [P('Dupnutí', 8, krumpStomp), P('Údery hrudníku', 8, krumpChest), P('Buck', 8, krumpBuck), P('Poskoky', 8, krumpHop)]),
-  orange: dance({ group: 'pop', name: 'Orange Justice', emoji: '🍊', bpm: 128, song: 'orange', color: '#fb923c', lag: 0.06,
-    info: 'Orange Justice je populární taneční „emote“ ze hry Fortnite z roku 2018. Tohle je moje stylizace: točení nohou ze strany na stranu s kolenními pružinami, střídavé švihy rukou, poskoky do strany, kruhy rukou a otočka s pózou. Hudba je originální skladba, ne původní nahrávka.',
-    tell: 'střídavé švihy rukou před tělem, točení špiček a poskoky do stran' },
-  (P) => [P('Twist a švih', 8, ojTwist), P('Poskoky do stran', 8, ojHop), P('Kruhy rukou', 8, ojWindmill), P('Twist a švih', 8, ojTwist), P('Otočka a póza', 9, ojFinish)]),
+  orange: dance({ group: 'pop', name: 'Orange Justice', emoji: '🍊', bpm: 162, song: 'orange', color: '#fb923c', lag: 0.05,
+    info: 'Orange Justice je taneční „emote“ z Fortnite (2018), který vznikl z internetového tance „Dance Like Nobody’s Watching“. Smyčka má čtyři části po čtyřech dobách: zkřížené ruce před hrudí s točením špiček, široké švihy paží ve výrazném rozkroku, ruce nad hlavou a pumpování kolen a hluboký výpad do strany se švihem paží. Sestava je podle videa, které jsi poslal, ale je to zjednodušená stylizace kostry. Hudba je moje originální skladba, ne původní nahrávka.',
+    tell: 'zkřížené ruce na hrudi, točení špiček, široké švihy paží a hluboké výpady do stran' },
+  (P) => {
+    const loop = [['Zkřížené ruce a twist', ojCross], ['Široké švihy paží', ojWide], ['Ruce nad hlavou', ojUp], ['Výpad do strany', ojLunge]];
+    return [...loop, ...loop, ...loop].map(([n, f]) => P(n, 4, f, 0.7)).concat([P('Finální póza', 5, ojFinal, 0.7)]);
+  }),
 };

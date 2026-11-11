@@ -33,7 +33,7 @@ export const SONGS = {
   },
   shuffle: {
     label: 'house, 133 BPM', bpm: 133.33, bars: 4,
-    drums: { kick: 'x...x...x...x...', ohat: '..x...x...x...x.', hat: 'x.xxx.xxx.xxx.xx', clap: '....x.......x...' },
+    drums: { kick: 'x...x...x...x..x', ohat: '..x...x...x...x.', hat: 'x.xxx.xxx.xxx.xx', clap: '....x.......x...' },
     chords: [{ n: ['A3', 'C4', 'E4', 'G4'] }, { n: ['A3', 'C4', 'E4', 'G4'] }, { n: ['F3', 'A3', 'C4', 'E4'] }, { n: ['G3', 'B3', 'D4', 'F4'] }].map(c => ({ ...c, r: '..x...x...x...x.' })), chordVoice: 'stab',
     bass: { root: ['A1', 'A1', 'F1', 'G1'], p: '.rr.or.r.rr.or.r', third: 3, wave: 'sawtooth' },
     lead: ['E5 . . . C5 . . . A4 . . . . . . .', 'E5 . . . C5 . . . G4 . . . . . . .', 'C5 . . . A4 . . . F4 . . . . . . .', 'D5 . . . B4 . . . G4 . . . . . . .'], leadVoice: 'pluck',
@@ -76,8 +76,8 @@ export const SONGS = {
     lead: [], leadVoice: 'saw',
   },
   orange: {
-    label: 'elektro-pop, 128 BPM', bpm: 128, bars: 4,
-    drums: { kick: 'x...x...x...x...', ohat: '..x...x...x...x.', hat: 'x.xxx.xxx.xxx.xx', clap: '....x.......x...' },
+    label: 'elektro-pop, 162 BPM', bpm: 162, bars: 4,
+    drums: { kick: 'x...x...x...x..x', ohat: '..x...x...x...x.', hat: 'x.xxx.xxx.xxx.xx', clap: '....x.......x...' },
     arp: [{ n: ['C5', 'E5', 'G5'], p: '0210 1201 0210 1204' }, { n: ['B4', 'D5', 'G5'], p: '0210 1201 0210 1204' }, { n: ['A4', 'C5', 'E5'], p: '0210 1201 0210 1204' }, { n: ['A4', 'C5', 'F5'], p: '0210 1201 0210 1204' }], arpVoice: 'pluck',
     bass: { root: ['C2', 'G1', 'A1', 'F1'], p: 'r.r.o.r.r.r.o.r.', third: 4, wave: 'sawtooth' },
     lead: ['G5 . E5 . G5 . A5 . G5 . E5 . D5 . . .', 'F5 . D5 . F5 . G5 . F5 . D5 . B4 . . .', 'E5 . C5 . E5 . F5 . E5 . C5 . A4 . . .', 'F5 . A5 . G5 . F5 . E5 . D5 . C5 . . .'], leadVoice: 'bell',
