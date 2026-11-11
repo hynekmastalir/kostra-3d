@@ -190,3 +190,37 @@ input[type=range] { width: 100%; min-height: var(--tap); accent-color: var(--acc
 
 .music-row{align-items:center;margin:10px 0 0}
 .dance-info p{margin:0 0 6px}.dance-info p:last-child{margin:0}
+
+/* ---------- zábavné části tanců ---------- */
+.fun-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 8px; border: 0; border-radius: 0; scrollbar-width: thin; }
+.fun-tabs button { flex: none; min-height: 40px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface2); font-weight: 600; font-size: .9rem; white-space: nowrap; }
+.fun-tabs button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.fun-sec[hidden] { display: none; }
+.grow { flex: 1 1 0; }
+.cp-list { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 6px; }
+.cp-list li { display: flex; align-items: center; gap: 6px; padding: 4px 8px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface2); min-height: 40px; }
+.cp-steps { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 0 10px; }
+#cp-cat details { border-bottom: 1px solid var(--border); }
+#cp-cat summary { min-height: 44px; display: flex; align-items: center; font-weight: 600; cursor: pointer; }
+.vote { padding: 10px; border: 1px solid var(--accent); border-radius: 12px; background: var(--accent-soft); margin-top: 10px; }
+#st-result video { width: 100%; max-height: 260px; border-radius: 10px; background: #000; margin: 8px 0; }
+#st-acc, #st-scenes { gap: 6px; }
+
+/* rytmická hra */
+#rhythm { position: absolute; inset: 0; z-index: 2; pointer-events: none; display: flex; flex-direction: column; align-items: center; }
+#rhythm[hidden] { display: none; }
+#rh-hud { align-self: flex-start; margin: 8px 0 0 10px; display: flex; gap: 12px; align-items: baseline; font-weight: 800; font-size: 1.5rem; text-shadow: 0 1px 4px rgba(0,0,0,.5); color: #fff; background: rgba(0,0,0,.35); padding: 2px 12px; border-radius: 999px; }
+#rh-combo { font-size: 1rem; color: #fde047; }
+#rh-msg { position: absolute; top: 38%; font-weight: 800; font-size: 1.7rem; text-shadow: 0 2px 6px rgba(0,0,0,.6); opacity: 0; }
+#rh-msg.pop { animation: rhpop .6s ease-out; }
+@keyframes rhpop { 0% { opacity: 1; transform: scale(.7); } 25% { opacity: 1; transform: scale(1.15); } 100% { opacity: 0; transform: scale(1); } }
+#rh-lanes { flex: 1; width: min(100%, 360px); display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 6px 6px 8px; min-height: 0; }
+.rh-lane { position: relative; pointer-events: auto; border-radius: 12px; background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--c) 16%, transparent)); border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); overflow: hidden; touch-action: none; }
+.rh-line { position: absolute; left: 0; right: 0; top: 80%; height: 4px; background: var(--c); opacity: .85; box-shadow: 0 0 10px var(--c); }
+.note { position: absolute; left: 50%; top: -18px; width: 30px; height: 30px; margin-left: -15px; border-radius: 50%; background: var(--c); border: 3px solid #fff; box-shadow: 0 0 12px var(--c); will-change: transform; }
+.rh-pad { position: absolute; left: 4px; right: 4px; bottom: 4px; height: 17%; min-height: 40px; border-radius: 10px; border: 2px solid var(--c); background: color-mix(in srgb, var(--c) 30%, rgba(0,0,0,.4)); color: #fff; font-weight: 700; font-size: .85rem; display: grid; place-items: center; pointer-events: none; }
+.rh-pad small { opacity: .7; font-size: .7rem; }
+.rh-pad.hit { background: var(--c); }
+#rh-end { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(0,0,0,.45); pointer-events: auto; }
+.rh-card { background: var(--surface); padding: 18px 22px; border-radius: 16px; text-align: center; box-shadow: var(--shadow); max-width: 300px; }
+.rh-rank { font-size: 4rem; font-weight: 900; line-height: 1; color: var(--accent); }

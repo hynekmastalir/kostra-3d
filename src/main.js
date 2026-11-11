@@ -93,7 +93,7 @@ async function init() {
     }
     $('#tabs').addEventListener('click', e => { const b = e.target.closest('[data-mode]'); if (b) setMode(b.dataset.mode); });
     document.addEventListener('keydown', e => {
-      if (e.target.matches('input, select, textarea') || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.target.matches?.('input, select, textarea') || e.ctrlKey || e.metaKey || e.altKey) return;
       if (e.key === '1') setMode('browse'); else if (e.key === '2') setMode('cards'); else if (e.key === '3') setMode('quiz'); else if (e.key === '4') setMode('dance');
     });
     modes.browse.enter();

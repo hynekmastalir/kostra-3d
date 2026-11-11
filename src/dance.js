@@ -4,6 +4,7 @@ import { $, esc } from './ui.js';
 import { DANCES, KEYS, SIDES, blank, mix } from './choreo.js';
 import { createMusic, SONGS } from './music.js';
 import { store } from './storage.js';
+import { createFun } from './fun.js';
 
 /* Tanec kostry.
    Model se skládá z 203 pevných kostí, proto vznikne „kostra v kostře“: kosti se rozdělí do segmentů
@@ -95,7 +96,7 @@ export function buildRig(meshes) {
     }
     contact[sname] = pts;
   }
-  return { P, segMeshes, contact, groundY };
+  return { P, segMeshes, contact, groundY, seg };
 }
 
 /* ---------- pózy (choreografie jsou v choreo.js) ---------- */
@@ -109,6 +110,7 @@ export function createDance(ctx) {
   const mcfg = Object.assign({ on: true, vol: 0.8 }, store.get('danceMusic', {}));
   music.setEnabled(mcfg.on); music.setVolume(mcfg.vol);
   let rig = null, current = null, startAt = 0, playT = 0, lastSec = 0, speed = 1, blendStart = 0, active = false, stage = null, shadow = null;
+  let part = null;                      // aktivní rozšiřující část (bitva, rytmus…); null = běžné tance
   let shown = blank(), blendFrom = blank(), hold = null, phraseShown = '';      // hold: ladicí podržení jedné pózy
   const REST = blank();
 
@@ -131,6 +133,9 @@ export function createDance(ctx) {
     </div>
     <p class="muted small" id="dance-hint">Rozsypání: kosti se uvolní, spadnou a zůstanou ležet na zemi. Složit je zase přivolá zpátky.</p>`;
 
+  const baseHTML = root.innerHTML;
+  root.innerHTML = `<div class="seg fun-tabs" id="fun-tabs"></div><div id="sec-tance" class="fun-sec">${baseHTML}</div>`;
+
   const mat = new THREE.Matrix4(), tmpA = new THREE.Matrix4(), tmpB = new THREE.Matrix4(), q = new THREE.Quaternion(), v = new THREE.Vector3();
   const AX = new THREE.Vector3(1, 0, 0), AY = new THREE.Vector3(0, 1, 0), AZ = new THREE.Vector3(0, 0, 1);
   const qa = (axis, deg) => new THREE.Quaternion().setFromAxisAngle(axis, deg * D2R);
@@ -145,8 +150,8 @@ export function createDance(ctx) {
     return out.multiply(tmpA);
   }
 
-  function limbs(parentPelvis, p, S) {
-    const M = {}; const P = rig.P;
+  function limbs(parentPelvis, p, r) {
+    const M = {}; const P = r.P;
     for (const sd of SIDES) {
       const sg = sd === 'R' ? -1 : 1;
       M['thigh' + sd] = pivotM(parentPelvis, P['hip' + sd], qa(AZ, sg * p['hipAbd' + sd]).multiply(qa(AX, -p['hipFlex' + sd])).multiply(qa(AY, p['hipTw' + sd])));
@@ -157,22 +162,22 @@ export function createDance(ctx) {
   }
 
   // vodorovný bod, kolem kterého se tělo otáčí: -1 pravé chodidlo, 0 střed pánve, 1 levé chodidlo, 2 horní část zad
-  function spinPoint(sp) {
-    const P = rig.P; sp = Math.max(-1, Math.min(2, sp)); let a, b, k;
+  function spinPoint(sp, r = rig) {
+    const P = r.P; sp = Math.max(-1, Math.min(2, sp)); let a, b, k;
     if (sp <= 0) { a = P.ankleR; b = P.center; k = sp + 1; } else if (sp <= 1) { a = P.center; b = P.ankleL; k = sp; } else { a = P.ankleL; b = P.chest; k = sp - 1; }
     return [a.x + (b.x - a.x) * k, a.z + (b.z - a.z) * k];
   }
 
-  function compute(p) {
-    const P = rig.P;
+  function compute(p, r = rig) {
+    const P = r.P;
     // kořen: náklon a předklon kolem středu pánve, pak otočení kolem svislé osy a posun (výška se doplní podle země)
-    const [px, pz] = spinPoint(p.sp);
+    const [px, pz] = spinPoint(p.sp, r);
     const root = new THREE.Matrix4().makeTranslation(p.tx, 0, p.tz);
     root.multiply(tmpA.makeTranslation(px, 0, pz)).multiply(tmpB.makeRotationY(p.ry * D2R)).multiply(tmpA.makeTranslation(-px, 0, -pz));
     root.multiply(tmpA.makeTranslation(P.center.x, P.center.y, P.center.z)).multiply(tmpB.makeRotationFromQuaternion(euler(p.rx, 0, p.rz)));
     root.multiply(tmpA.makeTranslation(-P.center.x, -P.center.y, -P.center.z));
     const pel = pivotM(root, P.center, euler(p.pTilt, p.pTwist, p.pRoll));
-    const M = { pelvis: pel, ...limbs(pel, p) };
+    const M = { pelvis: pel, ...limbs(pel, p, r) };
     M.torso = pivotM(pel, P.waist, euler(p.lean, p.twist, p.roll));
     M.head = pivotM(M.torso, P.neck, euler(p.hNod, p.hTurn, p.hTilt));
     for (const sd of SIDES) {
@@ -183,19 +188,25 @@ export function createDance(ctx) {
     }
     // nejnižší bod celého těla se opře o zem (kromě fáze ve vzduchu, kde výšku určuje oblouk skoku)
     let low = Infinity;
-    for (const [name, pts] of Object.entries(rig.contact)) { const m = M[name]; if (!m) continue; for (const pt of pts) { v.copy(pt).applyMatrix4(m); if (v.y < low) low = v.y; } }
-    const Y = (1 - p.fz) * (rig.groundY - low) + p.ty;
+    for (const [name, pts] of Object.entries(r.contact)) { const m = M[name]; if (!m) continue; for (const pt of pts) { v.copy(pt).applyMatrix4(m); if (v.y < low) low = v.y; } }
+    const Y = (1 - p.fz) * (r.groundY - low) + p.ty;
     for (const m of Object.values(M)) m.elements[13] += Y;
     return { M, Y };
   }
 
-  function apply(p) {
-    shown = p;
-    const { M, Y } = compute(p);
-    for (const [name, list] of Object.entries(rig.segMeshes)) {
+  const hooks = [];       // funkce (M, rig) volané po každém nastavení pózy (převleky)
+  function applyRig(r, p, dx = 0) {
+    const { M, Y } = compute(dx ? { ...p, tx: p.tx + dx } : p, r);
+    for (const [name, list] of Object.entries(r.segMeshes)) {
       const m = M[name]; if (!m) continue;
       for (const mesh of list) { mesh.matrix.copy(m); mesh.matrixWorldNeedsUpdate = true; }
     }
+    for (const h of hooks) h(M, r);
+    return Y;
+  }
+  function apply(p) {
+    shown = p;
+    applyRig(rig, p);
     // stín na zemi: čím výš je pánev, tím je menší a světlejší
     const k = 1 / (1 + Math.max(0, p.ty) / 60);
     shadow.scale.setScalar(k); shadow.material.opacity = 0.55 * k;
@@ -276,6 +287,7 @@ export function createDance(ctx) {
       b.v.set((b.pos.x - cm.x) * 0.25 + rnd(-22, 22), rnd(10, 90), (b.pos.z - cm.z) * 0.25 + rnd(-22, 22));
       b.w.set(rnd(-1, 1), rnd(-1, 1), rnd(-1, 1)).normalize().multiplyScalar(rnd(2, 7));
     }
+    for (const h of hooks) h(null, null);
     phys = { mode: 'fall', t: 0, last: performance.now() / 1000, bodies };
     shadow.visible = false;
     setButtons();
@@ -375,6 +387,7 @@ export function createDance(ctx) {
     if (!active) return false;
     if (phys) return stepPhys(now);
     if (hold) { apply(hold); return false; }
+    if (part && part.onFrame) { const r = part.onFrame(now); if (r !== undefined) return r; }
     const sec = now / 1000, playing = !!current;
     let target = REST;
     if (playing) {
@@ -413,7 +426,43 @@ export function createDance(ctx) {
     $('#dance-stop').disabled = true; showInfo(null); phraseShown = ''; $('#dance-badge').hidden = true; viewer.requestRender();
   }
 
-  root.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b) start(b.dataset.d); });
+  /* ---------- rozšiřující části (bitva, rytmus, vlastní choreografie, fyzika, studio) ---------- */
+  const core = {
+    THREE, viewer, music, mcfg, DANCES, SONGS, store, root, hooks,
+    get rig() { return rig; }, get stage() { return stage; }, get shadow() { return shadow; }, get shown() { return shown; }, get current() { return current; }, get speed() { return speed; }, get phys() { return phys; },
+    compute, applyRig, apply, frameDance, start, stopDance, scatter, assemble, blank, mix, sm, setButtons,
+    setBadge(text, color) { const el = $('#dance-badge'); el.hidden = !text; if (text) { el.textContent = text; el.style.borderColor = color || ''; } },
+    cloneRig(tint) {                       // druhá kostra: kopie kostí se sdílenou geometrií
+      const segMeshes = {}, meshes = [];
+      for (const [name, list] of Object.entries(rig.segMeshes)) segMeshes[name] = list.map(m => {
+        const c = new THREE.Mesh(m.geometry, m.material.clone()); c.material.color.lerp(new THREE.Color(tint), 0.65); c.matrixAutoUpdate = false; c.matrix.copy(m.matrix); c.matrixWorldNeedsUpdate = true; meshes.push(c); return c;
+      });
+      meshes.forEach(m => viewer.scene.add(m));
+      return { ...rig, segMeshes, meshes, dispose() { meshes.forEach(m => { viewer.scene.remove(m); m.material.dispose(); }); } };
+    },
+  };
+  const fun = createFun(core);
+  const tabsEl = $('#fun-tabs', root), secEls = { tance: $('#sec-tance', root) };
+  const tabDefs = [{ id: 'tance', label: '💃 Tance' }, ...fun.sections.map(s => ({ id: s.id, label: s.label }))];
+  tabsEl.innerHTML = tabDefs.map(t => `<button type="button" data-sec="${t.id}" aria-pressed="${t.id === 'tance'}">${t.label}</button>`).join('');
+  const byId = Object.fromEntries(fun.sections.map(s => [s.id, s]));
+  for (const s of fun.sections) { const el = document.createElement('div'); el.className = 'fun-sec'; el.id = 'sec-' + s.id; el.hidden = true; root.appendChild(el); secEls[s.id] = el; s.mount(el); }
+  function setSection(id) {
+    if (phys) return;
+    if (part) part.leave?.();
+    stopDance(); hold = null;
+    part = byId[id] || null;
+    for (const [k, el] of Object.entries(secEls)) el.hidden = k !== id;
+    tabsEl.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.sec === id)));
+    blendFrom = { ...blank() }; shown = blank(); apply(shown);
+    frameDance(false);
+    if (part) part.enter?.();
+    viewer.requestRender();
+  }
+  tabsEl.addEventListener('click', e => { const b = e.target.closest('[data-sec]'); if (b) setSection(b.dataset.sec); });
+  core.setSection = setSection;
+
+  root.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b && !b.closest('.fun-sec:not(#sec-tance)')) start(b.dataset.d); });
   $('#dance-stop', root).onclick = stopDance;
   $('#dance-scatter', root).onclick = scatter;
   $('#dance-assemble', root).onclick = assemble;
@@ -429,7 +478,7 @@ export function createDance(ctx) {
       frameDance(false);
       viewer.requestRender();
     },
-    leave() { active = false; root.hidden = true; current = null; music.stop(0); phys = null; phraseShown = ''; $('#dance-badge').hidden = true; if (shadow) shadow.visible = true; restore(); setButtons(); },
-    _debug: { music, get rig() { return rig; }, scatter, assemble, get phys() { return phys; }, Y(id, t) { return compute({ ...blank(), ...DANCES[id].pose(t) }).Y; }, period: id => DANCES[id].period, phraseAt: (id, t) => DANCES[id].phrase(t), pose: (id, t) => ({ ...blank(), ...DANCES[id].pose(t) }), start, show(id, t) { current = null; hold = { ...blank(), ...DANCES[id].pose(t) }; viewer.requestRender(); } },
+    leave() { if (part) part.leave?.(); part = null; for (const [k, el] of Object.entries(secEls)) el.hidden = k !== 'tance'; tabsEl.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.sec === 'tance'))); fun.cleanup?.(); active = false; root.hidden = true; current = null; music.stop(0); phys = null; phraseShown = ''; $('#dance-badge').hidden = true; if (shadow) shadow.visible = true; restore(); setButtons(); },
+    _debug: { fun, music, get rig() { return rig; }, scatter, assemble, get phys() { return phys; }, Y(id, t) { return compute({ ...blank(), ...DANCES[id].pose(t) }).Y; }, period: id => DANCES[id].period, phraseAt: (id, t) => DANCES[id].phrase(t), pose: (id, t) => ({ ...blank(), ...DANCES[id].pose(t) }), start, show(id, t) { current = null; hold = { ...blank(), ...DANCES[id].pose(t) }; viewer.requestRender(); } },
   };
 }

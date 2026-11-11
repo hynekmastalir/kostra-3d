@@ -51,7 +51,7 @@ function stepped(list, u, each = 1, snap = 0.1) {
 
 // sestavení tance z fází: [{ n: název, d: délka, b: délka překrytí s další fází, p: pose(tl) }]
 // Další fáze začíná běžet už b sekund před koncem předchozí a obě se plynule prolnou, takže pohyb nikdy neskočí.
-function sequence(phrases, { lag = 0.09, lagKeys = ['hNod', 'hTurn', 'hTilt', 'wrZR', 'wrZL', 'wrXR', 'wrXL'] } = {}) {
+export function sequence(phrases, { lag = 0.09, lagKeys = ['hNod', 'hTurn', 'hTilt', 'wrZR', 'wrZL', 'wrXR', 'wrXL'] } = {}) {
   const n = phrases.length, starts = []; let T = 0;
   for (const p of phrases) { starts.push(T); T += p.d - p.b; }
   const find = (t) => {
@@ -72,7 +72,7 @@ function sequence(phrases, { lag = 0.09, lagKeys = ['hNod', 'hTurn', 'hTilt', 'w
     for (const k of lagKeys) if (k in q || k in p) p[k] = q[k] || 0;
     return p;
   };
-  return { period: T, pose, phrase: (t, first = false) => { const { i, tl } = find(t), prev = phrases[(i - 1 + n) % n]; return ((!first || t >= T) && tl < prev.b * 0.5 ? prev : phrases[i]).n; } };
+  return { period: T, phrases, pose, phrase: (t, first = false) => { const { i, tl } = find(t), prev = phrases[(i - 1 + n) % n]; return ((!first || t >= T) && tl < prev.b * 0.5 ? prev : phrases[i]).n; } };
 }
 
 /* ====================== pomocné stavební prvky (čas v dobách u) ====================== */
@@ -483,3 +483,15 @@ export const DANCES = {
     tell: 'uvolněný předklon, kroky v pokrčených kolenou, pantomima rukou a rychlé nohy' },
   (P) => [P('Shaku Shaku', 8, afShaku), P('Azonto', 8, afAzonto), P('Gwara Gwara', 8, afGwara), P('Zanku', 8, afZanku), P('Shaku Shaku', 8, afShaku), P('Azonto', 8, afAzonto), P('Gwara Gwara', 8, afGwara), P('Zanku', 8, afZanku), P('Póza', 5, afPose)]),
 };
+
+/* vlastní choreografie: seznam [id tance, číslo fráze] se přepočítá na tempo vybrané skladby */
+export function customDance(items, bpm, song, name = 'Moje choreografie') {
+  const B = 60 / bpm, list = [];
+  for (const [id, i] of items) {
+    const src = DANCES[id], ph = src?.phrases?.[i]; if (!ph) continue;
+    const sc = bpm / src.bpm;                                   // kolikrát rychleji se má původní fráze přehrát
+    list.push({ n: ph.n, d: ph.d / sc, b: Math.min(Math.max(ph.b / sc, B * 0.75), ph.d / sc * 0.6), p: tl => ph.p(tl * sc) });
+  }
+  if (!list.length) return null;
+  return { group: 'custom', name, emoji: '🧩', bpm, B, song, color: '#a3e635', lag: 0.05, info: 'Tvoje vlastní sestava složená z hotových kroků.', tell: '', ...sequence(list, { lag: 0.05 }) };
+}

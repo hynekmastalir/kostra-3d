@@ -110,7 +110,7 @@ function makeEngine(c, dest) {
   const out = (node) => node.connect(master);
 
   const E = {
-    master, ctx: c,
+    master, post, ctx: c,
     kick(t, v = 1, tone = 1) { const o = c.createOscillator(), g = G(); o.frequency.setValueAtTime(165 * tone, t); o.frequency.exponentialRampToValueAtTime(46, t + 0.12); env(g.gain, t, 1.0 * v, 0.002, 0.34); o.connect(g); out(g); o.start(t); o.stop(t + 0.45); },
     kick808(t, f, len, v = 1) { const o = c.createOscillator(), g = G(), ws = c.createWaveShaper(); ws.curve = drive.curve; o.frequency.setValueAtTime(f * 2.2, t); o.frequency.exponentialRampToValueAtTime(f, t + 0.06); env(g.gain, t, 0.95 * v, 0.004, len); o.connect(ws); ws.connect(g); out(g); o.start(t); o.stop(t + len + 0.1); },
     snare(t, v = 1) { const n = noise(t, 0.3), f = c.createBiquadFilter(), g = G(), o = c.createOscillator(), og = G(); f.type = 'bandpass'; f.frequency.value = 1900; f.Q.value = 0.7; env(g.gain, t, 0.7 * v, 0.002, 0.18); n.connect(f); f.connect(g); out(g);
@@ -196,6 +196,8 @@ export function createMusic() {
     setEnabled(v) { on = v; applyGain(); },
     setVolume(v) { vol = v; applyGain(); },
     setSpeed(v) { speed = v; },
+    // zvuk pro nahrávání videa: vrací audio stopu, do které se zrcadlí výstup hudby
+    captureTrack() { if (!ensure()) return null; if (!this._dest) { this._dest = ctx.createMediaStreamDestination(); engine.post.connect(this._dest); } return this._dest.stream.getAudioTracks()[0] || null; },
     // spustí skladbu; vrací za kolik sekund (od teď) zazní první doba (včetně latence výstupu), aby se k ní mohl přisadit tanec
     start(id, spd = 1) {
       if (!SONGS[id] || !ensure()) return 0;

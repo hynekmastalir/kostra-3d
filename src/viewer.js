@@ -143,6 +143,7 @@ export class Viewer {
   }
 
   setTheme(dark) {
+    this.dark = dark;
     this.renderer.setClearColor(dark ? 0x12161c : 0xe9edf2, 1);
     this.requestRender();
   }

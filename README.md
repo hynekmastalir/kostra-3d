@@ -72,3 +72,13 @@ node tools/build-model.mjs <složka_stl> 0.25    # kostra.glb + barvy pro režim
 České a latinské názvy a popisy jsou v `tools/build-bones.mjs` a vznikly podle české anatomické terminologie
 (Terminologia Anatomica) z paměti, bez ověření proti tištěnému zdroji. Před ostrým použitím při studiu je vhodné je zkontrolovat
 (zejména názvy karpálních kostí, klínových kostí a bodů označených v popisech).
+
+## Zábava v záložce Tance
+
+Vedle tanců jsou v záložce Tance další části:
+
+- **Bitva:** dva kostlivci vedle sebe, každý jiný tanec, po 8 dobách se střídají. Po osmi kolech lze hlasovat, výhry se ukládají v prohlížeči.
+- **Rytmus:** noty padají v rytmu hudby (dráhy kopák, snare, ozdoba; klávesy A, S, D nebo klepnutí), počítá se skóre, combo a hodnocení, rekordy se ukládají.
+- **Vlastní:** skládání choreografie z kroků hotových tanců na vybranou hudbu, ukládání sestav.
+- **Fyzika:** tažení končetin, hlavy a trupu, klepnutím šťouchnutí, zvednutí za pánev a pád (z velké výšky se kostra rozsype).
+- **Studio:** převleky (cylindr, kšiltovka, párty čepice, brýle, sluneční brýle, sluchátka, afro, plášť), scény (disko, ulice, noc) a nahrávání videa (webm nebo mp4 podle prohlížeče) ke stažení nebo sdílení.
