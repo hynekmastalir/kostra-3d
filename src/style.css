@@ -183,3 +183,7 @@ input[type=range] { width: 100%; min-height: var(--tap); accent-color: var(--acc
 .dances.street{grid-template-columns:repeat(2,1fr)}
 .dances.street .dance-btn{min-height:72px}
 .dance-info{margin:10px 0;padding:10px 12px;border-radius:10px;background:var(--accent-soft);color:var(--text);font-size:.92rem;line-height:1.45}
+
+.dance-phrase{margin:10px 0 0;padding:6px 12px;border-radius:999px;background:var(--surface2);font-weight:700;font-size:.9rem;display:inline-block}
+
+#dance-badge{position:absolute;left:10px;top:10px;z-index:2;padding:8px 14px;border-radius:999px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);font-weight:700;font-size:.95rem;max-width:55%}

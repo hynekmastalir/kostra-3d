@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { bones } from './data.js';
 import { $, esc } from './ui.js';
+import { DANCES, KEYS, SIDES, blank, mix } from './choreo.js';
 
 /* Tanec kostry.
    Model se skládá z 203 pevných kostí, proto vznikne „kostra v kostře“: kosti se rozdělí do segmentů
@@ -10,7 +11,6 @@ import { $, esc } from './ui.js';
 
 const D2R = Math.PI / 180;
 const sm = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
-const pos = x => Math.max(0, x);
 
 /* ---------- segmenty a klouby ---------- */
 function segmentOf(b) {
@@ -72,199 +72,39 @@ export function buildRig(meshes) {
   P.neck = new THREE.Vector3(0, (atl.min.y + atl.max.y) / 2, (atl.min.z + atl.max.z) / 2);
   P.center = new THREE.Vector3(0, (P.hipR.y + P.hipL.y) / 2, (P.hipR.z + P.hipL.z) / 2);
 
-  // body chodidel, podle kterých se kostra drží země
-  const soles = { R: [], L: [] }; let groundY = Infinity;
-  for (const [s, list] of Object.entries(segMeshes)) {
-    if (!s.startsWith('foot')) continue;
+  // země: nejnižší bod chodidel v klidové pozici
+  let groundY = Infinity;
+  for (const [sname, list] of Object.entries(segMeshes)) if (sname.startsWith('foot')) for (const m of list) groundY = Math.min(groundY, m.geometry.boundingBox.min.y);
+  P.chest = new THREE.Vector3(0, (P.shoulderR.y + P.waist.y) / 2, (P.shoulderR.z + P.waist.z) / 2);
+
+  // kontaktní body: u každého segmentu krajní vrcholy v 26 směrech; nejnižší bod celého těla se drží země
+  // (nohy, ruce při 6-stepu, hlava při headspinu, záda při windmillu)
+  const dirs = [];
+  for (const x of [-1, 0, 1]) for (const y of [-1, 0, 1]) for (const z of [-1, 0, 1]) if (x || y || z) dirs.push(new THREE.Vector3(x, y, z).normalize());
+  const contact = {};
+  for (const [sname, list] of Object.entries(segMeshes)) {
+    const best = dirs.map(() => -Infinity), pts = dirs.map(() => new THREE.Vector3());
     for (const m of list) {
-      const bb = m.geometry.boundingBox; groundY = Math.min(groundY, bb.min.y);
-      soles[s.slice(-1)].push(new THREE.Vector3((bb.min.x + bb.max.x) / 2, bb.min.y, (bb.min.z + bb.max.z) / 2));
+      const a = m.geometry.attributes.position;
+      for (let i = 0; i < a.count; i++) {
+        const x = a.getX(i), y = a.getY(i), z = a.getZ(i);
+        for (let d = 0; d < dirs.length; d++) { const dot = x * dirs[d].x + y * dirs[d].y + z * dirs[d].z; if (dot > best[d]) { best[d] = dot; pts[d].set(x, y, z); } }
+      }
     }
+    contact[sname] = pts;
   }
-  return { P, segMeshes, soles, groundY };
+  return { P, segMeshes, contact, groundY };
 }
 
-/* ---------- pózy ---------- */
-const SIDES = ['R', 'L'];
-const KEYS = ['tx', 'tz', 'ty', 'fz', 'rx', 'ry', 'rz', 'pTilt', 'pTwist', 'pRoll', 'lean', 'twist', 'roll', 'hNod', 'hTurn', 'hTilt',
-  ...SIDES.flatMap(s => ['abd', 'flex', 'shTw', 'elbZ', 'elbX', 'wrZ', 'wrX', 'hipFlex', 'hipAbd', 'hipTw', 'knee', 'ankle'].map(k => k + s))];
-const blank = () => Object.fromEntries(KEYS.map(k => [k, 0]));
-const lerpPose = (a, b, k) => { const o = {}; for (const key of KEYS) o[key] = a[key] + (b[key] - a[key]) * k; return o; };
-
-// Souřadnice: Y nahoru, +Z dopředu, pravá strana těla je -X. Kladné úhly: ruka a noha dopředu, koleno pokrčit, trup předklon.
+/* ---------- pózy (choreografie jsou v choreo.js) ---------- */
 const PI2 = Math.PI * 2;
-
-// sled póz, mezi kterými se přeskakuje v rytmu (rychlý přechod + podržení): základ popping a locking
-function mixSparse(a, b, k) { const o = {}; for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) o[key] = (a[key] || 0) + ((b[key] || 0) - (a[key] || 0)) * k; return o; }
-function stepped(list, t, T, snap = 0.12) {
-  const n = list.length, hit = T / n, idx = Math.floor(t / hit) % n, local = (t - Math.floor(t / hit) * hit) / hit;
-  return { pose: mixSparse(list[(idx - 1 + n) % n], list[idx], sm(0, snap, local)), pop: Math.exp(-local * 9), local };
-}
-const pulse = (t, t0, tau) => (t >= t0 ? Math.exp(-(t - t0) / tau) : 0);     // doznívající úder v čase t0
-
-const DANCES = {
-  wave: {
-    group: 'basic', name: 'Zamávání', emoji: '👋', period: 2.4,
-    pose(t) {
-      const env = sm(0, 0.55, t) * (1 - sm(1.85, 2.4, t));
-      const w = Math.sin(PI2 * (t - 0.4) * 2.1) * env;
-      const sway = Math.sin(PI2 * t / 2.4);
-      const k = 5 + 3 * Math.sin(2 * PI2 * t / 2.4);
-      return {
-        abdR: 8 + 92 * env, flexR: 10 * env, elbZR: 88 * env + 30 * w, elbXR: 8 * env, wrZR: 16 * w,
-        abdL: 7 + 2 * sway, elbXL: 10, flexL: 4 * sway,
-        hTilt: 7 * env, hTurn: -10 * env, hNod: -3 * env + 2 * Math.sin(2 * PI2 * t / 2.4),
-        roll: 2.5 * sway, twist: -4 * env, pRoll: -2 * sway,
-        kneeR: k, kneeL: k, hipFlexR: k * 0.5, hipFlexL: k * 0.5, lean: 2,
-      };
-    },
-  },
-  jump: {
-    group: 'basic', name: 'Skok', emoji: '🦘', period: 1.9,
-    pose(t) {
-      const crouch = sm(0.0, 0.42, t) * (1 - sm(0.42, 0.56, t)) + 0.75 * sm(1.1, 1.2, t) * (1 - sm(1.2, 1.6, t));
-      const u = Math.min(1, Math.max(0, (t - 0.56) / 0.55));
-      const air = t >= 0.56 && t <= 1.11;
-      const tuck = air ? Math.sin(Math.PI * u) * 0.55 : 0;
-      const up = sm(0.4, 0.62, t) * (1 - sm(1.05, 1.35, t));
-      const push = sm(0.4, 0.58, t) * (1 - sm(0.58, 0.9, t));
-      const hip = 68 * crouch + 38 * tuck, kn = 88 * crouch + 55 * tuck, an = 30 * crouch - 28 * push - 10 * tuck;
-      const arm = -28 * sm(0.05, 0.4, t) * (1 - sm(0.4, 0.5, t));
-      return {
-        ty: air ? 4 * 52 * u * (1 - u) : 0, fz: sm(0.5, 0.6, t) * (1 - sm(1.1, 1.2, t)),
-        hipFlexR: hip, hipFlexL: hip, kneeR: kn, kneeL: kn, ankleR: an, ankleL: an, lean: 28 * crouch + 8 * tuck,
-        flexR: arm + 40 * up, flexL: arm + 40 * up, abdR: 150 * up + 6, abdL: 150 * up + 6, elbXR: 10 + 25 * (1 - up), elbXL: 10 + 25 * (1 - up),
-        hNod: -10 * up + 12 * crouch, hipAbdR: 4 * tuck, hipAbdL: 4 * tuck,
-      };
-    },
-  },
-  backflip: {
-    group: 'basic', name: 'Backflip', emoji: '🤸', period: 3.0,
-    pose(t) {
-      const c1 = sm(0.05, 0.5, t) * (1 - sm(0.5, 0.68, t));
-      const u = Math.min(1, Math.max(0, (t - 0.7) / 1.1));
-      const flight = t >= 0.7 && t <= 1.8;
-      const tuck = flight ? sm(0.1, 0.3, u) * (1 - sm(0.68, 0.86, u)) : 0;
-      const land = sm(1.78, 1.9, t) * (1 - sm(1.9, 2.45, t));
-      const cr = Math.max(c1, land * 0.8);
-      const up = sm(0.52, 0.72, t) * (1 - sm(1.35, 1.75, t));
-      const push = sm(0.62, 0.72, t) * (1 - sm(0.85, 1.1, t));
-      const hip = 75 * cr + 105 * tuck, kn = 95 * cr + 125 * tuck;
-      const flex = -45 * c1 + (1 - tuck) * 165 * up + 70 * tuck;
-      return {
-        ty: flight ? 4 * 65 * u * (1 - u) : 0, fz: sm(0.62, 0.72, t) * (1 - sm(1.76, 1.9, t)),
-        rx: -360 * sm(0.04, 0.92, u),
-        hipFlexR: hip, hipFlexL: hip, kneeR: kn, kneeL: kn, ankleR: 30 * cr - 35 * push, ankleL: 30 * cr - 35 * push,
-        lean: 30 * cr + 35 * tuck, flexR: flex, flexL: flex, abdR: 8, abdL: 8, elbXR: 80 * tuck + 10, elbXL: 80 * tuck + 10,
-        hNod: 25 * tuck + 8 * c1,
-      };
-    },
-  },
-  shuffle: {
-    group: 'basic', name: 'Šafl', emoji: '🕺', period: 0.9,
-    pose(t) {
-      const s = Math.sin(PI2 * t / 0.9), bob = Math.abs(Math.sin(PI2 * t / 0.9));
-      return {
-        hipFlexR: 48 * pos(s) - 20 * pos(-s) + 10, hipFlexL: 48 * pos(-s) - 20 * pos(s) + 10,
-        kneeR: 88 * pos(s) + 16, kneeL: 88 * pos(-s) + 16,
-        ankleR: -10 * pos(-s), ankleL: -10 * pos(s),
-        flexR: -38 * s, flexL: 38 * s, elbXR: 88, elbXL: 88, abdR: 10, abdL: 10,
-        lean: 10, twist: 10 * s, roll: 3 * s, pRoll: -4 * s, pTwist: -6 * s,
-        hNod: 4 + 5 * bob, hTurn: 6 * s,
-      };
-    },
-  },
-
-  /* ---------- street dance styly ---------- */
-  hiphop: {
-    group: 'street', name: 'Hip-hop', emoji: '🎤', period: 2.667,
-    info: 'Hip-hop vznikl v 70. letech v newyorském Bronxu spolu s hudbou stejného jména. Základem je „bounce“: rytmické pohupování v kolenou na každou dobu a uvolněný „groove“ hrudníku a ramen.',
-    pose(t) {
-      const b = t / 0.6667, d = 0.5 + 0.5 * Math.cos(PI2 * b), sway = Math.sin(PI2 * b / 2), pump = Math.sin(PI2 * b);
-      return {
-        kneeR: 14 + 22 * d, kneeL: 14 + 22 * d, hipFlexR: 8 + 14 * d, hipFlexL: 8 + 14 * d, ankleR: 5 * d, ankleL: 5 * d,
-        lean: 6 + 7 * d, pRoll: 4 * sway, roll: -5 * sway, twist: 9 * sway, pTwist: -5 * sway,
-        flexR: 30 + 25 * pump, flexL: 30 - 25 * pump, elbXR: 82, elbXL: 82, abdR: 14, abdL: 14, wrXR: 10 * pump, wrXL: -10 * pump,
-        hNod: 6 * d, hTilt: 6 * sway, hTurn: 8 * sway,
-        hipAbdR: 10 * pos(Math.sin(PI2 * b / 4)), hipAbdL: 10 * pos(-Math.sin(PI2 * b / 4)),
-      };
-    },
-  },
-  popping: {
-    group: 'street', name: 'Popping', emoji: '🤖', period: 3.2,
-    info: 'Popping vznikl v 70. letech v Kalifornii (Fresno, Oakland). Tanečník v rytmu prudce stahuje svaly („pop“ nebo „hit“) a mezi údery drží pózu. Tak vznikají robotické pohyby („robot“) i další techniky v rámci popping.',
-    pose(t) {
-      const L = [
-        { hTurn: 30, abdR: 8, abdL: 8, lean: 3 },
-        { hTurn: -30, abdR: 90, elbZR: 90, abdL: 8, twist: -12 },
-        { flexR: 90, elbXR: 90, flexL: 90, elbXL: 90, lean: 8, hNod: 12 },
-        { hTurn: 35, abdL: 90, elbZL: 90, abdR: 12, twist: 12, hTilt: 10 },
-        { hTurn: -20, flexR: 90, abdR: 0, flexL: -40, twist: -15, lean: 4 },
-        { abdR: 90, abdL: 90, roll: 6, hNod: -6 },
-        { hTurn: 20, abdR: 90, elbZR: 90, abdL: 90, elbZL: -90, roll: -5 },
-        { hNod: 15, hTurn: -35, flexR: 90, elbXR: 120, abdL: 10, roll: -6, twist: 8 },
-      ];
-      const { pose, pop } = stepped(L, t, 3.2, 0.1);
-      return { ...pose, kneeR: 8 + 10 * pop, kneeL: 8 + 10 * pop, hipFlexR: 4 + 5 * pop, hipFlexL: 4 + 5 * pop, lean: (pose.lean || 0) + 4 * pop, hNod: (pose.hNod || 0) + 4 * pop };
-    },
-  },
-  locking: {
-    group: 'street', name: 'Locking', emoji: '🔒', period: 2.4,
-    info: 'Locking vznikl koncem 60. let v Los Angeles (Don Campbell, skupina The Lockers). „Lock“ je náhlé zastavení pohybu a podržení pózy. Typické jsou ukazování prstem, rotace zápěstí a pády na kolena („knee drop“).',
-    pose(t) {
-      const L = [
-        { flexR: 95, abdR: 12, elbXL: 100, abdL: 25, flexL: 10, hTurn: -25, lean: 8, kneeR: 20, kneeL: 20, hipFlexR: 10, hipFlexL: 10, roll: 4 },
-        { flexR: 90, flexL: 90, elbXR: 100, elbXL: 100, lean: 15, hNod: 10, kneeR: 30, kneeL: 30, hipFlexR: 20, hipFlexL: 20 },
-        { hipFlexR: 75, kneeR: 120, ankleR: -40, hipFlexL: 40, kneeL: 70, lean: 20, flexR: -30, flexL: 60, elbXL: 90, hTurn: 30, roll: -5 },
-        { abdL: 160, flexL: 10, abdR: 20, elbXR: 100, hTilt: -8, kneeR: 15, kneeL: 15, twist: 10, hTurn: 25 },
-      ];
-      const { pose, pop } = stepped(L, t, 2.4, 0.09);
-      const roll = Math.sin(PI2 * 5 * t);
-      return { ...pose, wrZR: 35 * roll, wrXR: 25 * Math.cos(PI2 * 5 * t), wrZL: -35 * roll, wrXL: 25 * Math.cos(PI2 * 5 * t),
-        kneeR: (pose.kneeR || 0) + 7 * pop, kneeL: (pose.kneeL || 0) + 7 * pop, lean: (pose.lean || 0) + 4 * pop };
-    },
-  },
-  breaking: {
-    group: 'street', name: 'Breaking', emoji: '🌀', period: 2.4,
-    info: 'Breaking (breakdance) vznikl v 70. letech v Bronxu na parties, kde DJ Kool Herc prodlužoval „break“, instrumentální část písně. Tanečník začíná „toprockem“, tancem ve stoje (zde ukázka s „Indian step“), a pak přechází k zemi. V roce 2024 byl poprvé na olympijských hrách.',
-    pose(t) {
-      const ph = PI2 * t / 2.4, s = Math.sin(ph), c = Math.cos(ph), bob = 0.5 + 0.5 * Math.cos(2 * ph);
-      return {
-        lean: 24, kneeR: 30 + 14 * bob, kneeL: 30 + 14 * bob, hipFlexR: 22 + 10 * bob, hipFlexL: 22 + 10 * bob,
-        // překročení nohou: noha, která právě stoupá, se zvedá a překříží dopředu
-        hipAbdR: -24 * pos(s), hipAbdL: -24 * pos(-s), hipFlexR: 22 + 45 * pos(s), hipFlexL: 22 + 45 * pos(-s),
-        flexR: -40 * s + 20, flexL: 40 * s + 20, elbXR: 75, elbXL: 75, abdR: 22, abdL: 22,
-        twist: 16 * s, pTwist: -10 * s, roll: 4 * c, hNod: 5 * bob, hTurn: -10 * s, pRoll: 5 * s,
-      };
-    },
-  },
-  krump: {
-    group: 'street', name: 'Krump', emoji: '💥', period: 2.0,
-    info: 'Krump vznikl na začátku 2000. let v South Central v Los Angeles. Je to expresivní, silový tanec plný úderů rukama, dupání a prudkých „chest popů“ (zášklby hrudníku). Tanečníci v něm vyjadřují silné emoce.',
-    pose(t) {
-      const lift = (a, b) => (t >= a && t < b ? Math.pow(Math.sin(Math.PI * (t - a) / (b - a)), 0.7) : 0);
-      const liftR = lift(0, 0.45), liftL = lift(1.0, 1.45);
-      const H = pulse(t, 0.45, 0.1) + pulse(t, 0.95, 0.1) + pulse(t, 1.45, 0.1) + pulse(t, 1.95, 0.1);
-      const up1 = sm(0.5, 0.75, t) * (1 - sm(0.82, 0.95, t)), up2 = sm(1.5, 1.72, t) * (1 - sm(1.8, 1.95, t));
-      const hitA = pulse(t, 0.95, 0.12), hitB = pulse(t, 1.95, 0.12);
-      return {
-        kneeR: 28 + 100 * liftR + 18 * pulse(t, 0.45, 0.12), kneeL: 28 + 100 * liftL + 18 * pulse(t, 1.45, 0.12),
-        hipFlexR: 18 + 72 * liftR, hipFlexL: 18 + 72 * liftL, hipAbdR: 14, hipAbdL: 14, ankleR: -10 * liftR, ankleL: -10 * liftL,
-        lean: 22 - 16 * H, hNod: 12 - 14 * H, twist: 14 * Math.sin(PI2 * t / 2.0), roll: 4 * Math.sin(PI2 * t),
-        flexR: 35 + 105 * up1 - 45 * hitA + 60 * up2 - 40 * hitB, flexL: 35 + 105 * up1 - 45 * hitA,
-        abdR: 18 + 40 * up2, abdL: 18, elbXR: 100 - 60 * up1, elbXL: 100 - 60 * up1, shTwR: 0,
-        pRoll: 6 * Math.sin(PI2 * t / 1.0), hTilt: 8 * H, hTurn: 14 * Math.sin(PI2 * t / 2.0),
-      };
-    },
-  },
-};
 
 /* ---------- animátor ---------- */
 export function createDance(ctx) {
   const { viewer } = ctx;
   const root = $('#view-dance');
   let rig = null, current = null, startedAt = 0, speed = 1, blendStart = 0, active = false, stage = null, shadow = null;
-  let shown = blank(), blendFrom = blank(), hold = null;      // hold: ladicí podržení jedné pózy
+  let shown = blank(), blendFrom = blank(), hold = null, phraseShown = '';      // hold: ladicí podržení jedné pózy
   const REST = blank();
 
   const btn = (id, d) => `<button class="dance-btn" type="button" data-d="${id}" aria-pressed="false"><span class="em" aria-hidden="true">${d.emoji}</span><span>${esc(d.name)}</span></button>`;
@@ -308,20 +148,21 @@ export function createDance(ctx) {
     return M;
   }
 
+  // vodorovný bod, kolem kterého se tělo otáčí: -1 pravé chodidlo, 0 střed pánve, 1 levé chodidlo, 2 horní část zad
+  function spinPoint(sp) {
+    const P = rig.P; sp = Math.max(-1, Math.min(2, sp)); let a, b, k;
+    if (sp <= 0) { a = P.ankleR; b = P.center; k = sp + 1; } else if (sp <= 1) { a = P.center; b = P.ankleL; k = sp; } else { a = P.ankleL; b = P.chest; k = sp - 1; }
+    return [a.x + (b.x - a.x) * k, a.z + (b.z - a.z) * k];
+  }
+
   function compute(p) {
     const P = rig.P;
-    // 1. průchod: bez otočení těla zjistí, o kolik zvednout/spustit, aby nejnižší bod chodidel stál na zemi
-    const rootA = new THREE.Matrix4().makeTranslation(p.tx, 0, p.tz);
-    const pelA = pivotM(rootA, P.center, euler(p.pTilt, p.pTwist, p.pRoll));
-    const LA = limbs(pelA, p);
-    let low = Infinity;
-    for (const sd of SIDES) for (const pt of rig.soles[sd]) { v.copy(pt).applyMatrix4(LA['foot' + sd]); if (v.y < low) low = v.y; }
-    const Y = (1 - p.fz) * (rig.groundY - low) + p.ty;
-    // 2. průchod: celé tělo včetně otočení kolem středu pánve (salto)
-    const root = new THREE.Matrix4().makeTranslation(p.tx, Y, p.tz);
-    tmpA.makeTranslation(P.center.x, P.center.y, P.center.z); root.multiply(tmpA);
-    root.multiply(tmpB.makeRotationFromQuaternion(euler(p.rx, p.ry, p.rz)));
-    tmpA.makeTranslation(-P.center.x, -P.center.y, -P.center.z); root.multiply(tmpA);
+    // kořen: náklon a předklon kolem středu pánve, pak otočení kolem svislé osy a posun (výška se doplní podle země)
+    const [px, pz] = spinPoint(p.sp);
+    const root = new THREE.Matrix4().makeTranslation(p.tx, 0, p.tz);
+    root.multiply(tmpA.makeTranslation(px, 0, pz)).multiply(tmpB.makeRotationY(p.ry * D2R)).multiply(tmpA.makeTranslation(-px, 0, -pz));
+    root.multiply(tmpA.makeTranslation(P.center.x, P.center.y, P.center.z)).multiply(tmpB.makeRotationFromQuaternion(euler(p.rx, 0, p.rz)));
+    root.multiply(tmpA.makeTranslation(-P.center.x, -P.center.y, -P.center.z));
     const pel = pivotM(root, P.center, euler(p.pTilt, p.pTwist, p.pRoll));
     const M = { pelvis: pel, ...limbs(pel, p) };
     M.torso = pivotM(pel, P.waist, euler(p.lean, p.twist, p.roll));
@@ -332,6 +173,11 @@ export function createDance(ctx) {
       M['farm' + sd] = pivotM(M['uarm' + sd], P['elbow' + sd], qa(AZ, sg * p['elbZ' + sd]).multiply(qa(AX, -p['elbX' + sd])));
       M['hand' + sd] = pivotM(M['farm' + sd], P['wrist' + sd], qa(AZ, sg * p['wrZ' + sd]).multiply(qa(AX, -p['wrX' + sd])));
     }
+    // nejnižší bod celého těla se opře o zem (kromě fáze ve vzduchu, kde výšku určuje oblouk skoku)
+    let low = Infinity;
+    for (const [name, pts] of Object.entries(rig.contact)) { const m = M[name]; if (!m) continue; for (const pt of pts) { v.copy(pt).applyMatrix4(m); if (v.y < low) low = v.y; } }
+    const Y = (1 - p.fz) * (rig.groundY - low) + p.ty;
+    for (const m of Object.values(M)) m.elements[13] += Y;
     return { M, Y };
   }
 
@@ -398,7 +244,7 @@ export function createDance(ctx) {
     return [...new Set(idx)].map(i => new THREE.Vector3(a.getX(i) - c0.x, a.getY(i) - c0.y, a.getZ(i) - c0.z));
   }
 
-  function segmentMatrices(pose) { return compute(pose).M; }
+  function segmentMatrices(pose) { return compute(pose).M; }   // matice jsou už posunuté o výšku nad zemí
 
   function scatter() {
     if (phys) return;
@@ -528,7 +374,8 @@ export function createDance(ctx) {
       target = { ...blank(), ...d.pose(t) };
     }
     const k = sm(0, 0.4, sec - blendStart);
-    apply(k < 1 ? lerpPose(blendFrom, target, k) : target);
+    apply(k < 1 ? mix(blendFrom, target, k) : target);
+    if (playing) { const nm = DANCES[current].phrase((sec - startedAt) * speed); if (nm !== phraseShown) { phraseShown = nm; const el = $('#dance-badge'); el.hidden = false; el.textContent = nm; } }
     return playing || k < 1;       // po postavení do klidu se vykreslování zastaví
   }
 
@@ -550,7 +397,7 @@ export function createDance(ctx) {
     if (!current) return;
     blendFrom = { ...shown }; current = null; blendStart = performance.now() / 1000;
     document.querySelectorAll('#view-dance .dance-btn').forEach(b => b.setAttribute('aria-pressed', 'false'));
-    $('#dance-stop').disabled = true; showInfo(null); viewer.requestRender();
+    $('#dance-stop').disabled = true; showInfo(null); phraseShown = ''; $('#dance-badge').hidden = true; viewer.requestRender();
   }
 
   root.addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (b) start(b.dataset.d); });
@@ -567,7 +414,7 @@ export function createDance(ctx) {
       frameDance(false);
       viewer.requestRender();
     },
-    leave() { active = false; root.hidden = true; current = null; phys = null; if (shadow) shadow.visible = true; restore(); setButtons(); },
-    _debug: { get rig() { return rig; }, scatter, assemble, get phys() { return phys; }, Y(id, t) { return compute({ ...blank(), ...DANCES[id].pose(t) }).Y; }, period: id => DANCES[id].period, start, show(id, t) { current = null; hold = { ...blank(), ...DANCES[id].pose(t) }; viewer.requestRender(); } },
+    leave() { active = false; root.hidden = true; current = null; phys = null; phraseShown = ''; $('#dance-badge').hidden = true; if (shadow) shadow.visible = true; restore(); setButtons(); },
+    _debug: { get rig() { return rig; }, scatter, assemble, get phys() { return phys; }, Y(id, t) { return compute({ ...blank(), ...DANCES[id].pose(t) }).Y; }, period: id => DANCES[id].period, phraseAt: (id, t) => DANCES[id].phrase(t), pose: (id, t) => ({ ...blank(), ...DANCES[id].pose(t) }), start, show(id, t) { current = null; hold = { ...blank(), ...DANCES[id].pose(t) }; viewer.requestRender(); } },
   };
 }
