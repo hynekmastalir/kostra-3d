@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { bones } from './data.js';
 import { $, esc } from './ui.js';
 import { DANCES, KEYS, SIDES, blank, mix } from './choreo.js';
+import { createMusic, SONGS } from './music.js';
+import { store } from './storage.js';
 
 /* Tanec kostry.
    Model se skládá z 203 pevných kostí, proto vznikne „kostra v kostře“: kosti se rozdělí do segmentů
@@ -103,7 +105,10 @@ const PI2 = Math.PI * 2;
 export function createDance(ctx) {
   const { viewer } = ctx;
   const root = $('#view-dance');
-  let rig = null, current = null, startedAt = 0, speed = 1, blendStart = 0, active = false, stage = null, shadow = null;
+  const music = createMusic();
+  const mcfg = Object.assign({ on: true, vol: 0.8 }, store.get('danceMusic', {}));
+  music.setEnabled(mcfg.on); music.setVolume(mcfg.vol);
+  let rig = null, current = null, startAt = 0, playT = 0, lastSec = 0, speed = 1, blendStart = 0, active = false, stage = null, shadow = null;
   let shown = blank(), blendFrom = blank(), hold = null, phraseShown = '';      // hold: ladicí podržení jedné pózy
   const REST = blank();
 
@@ -114,7 +119,10 @@ export function createDance(ctx) {
     <div class="dances" id="dances">${Object.entries(DANCES).filter(([, d]) => d.group === 'basic').map(([id, d]) => btn(id, d)).join('')}</div>
     <h3 class="dgroup">Street dance styly</h3>
     <div class="dances street" id="dances-street">${Object.entries(DANCES).filter(([, d]) => d.group === 'street').map(([id, d]) => btn(id, d)).join('')}</div>
+    <h3 class="dgroup">Populární tance</h3>
+    <div class="dances street" id="dances-pop">${Object.entries(DANCES).filter(([, d]) => d.group === 'pop').map(([id, d]) => btn(id, d)).join('')}</div>
     <div class="dance-info" id="dance-info" hidden></div>
+    <div class="row music-row"><label class="check grow"><input type="checkbox" id="dance-music" ${mcfg.on ? 'checked' : ''}><span>🎵 Hudba k tanci</span></label><input type="range" id="dance-vol" min="0" max="100" value="${Math.round(mcfg.vol * 100)}" aria-label="Hlasitost" style="max-width:140px"></div>
     <label class="field"><span>Rychlost: <b id="dance-speed-val">100 %</b></span><input type="range" id="dance-speed" min="50" max="160" step="5" value="100"></label>
     <button class="btn block" type="button" id="dance-stop" disabled>Zastavit a postavit se</button>
     <div class="row scatter-row">
@@ -248,7 +256,7 @@ export function createDance(ctx) {
 
   function scatter() {
     if (phys) return;
-    current = null; hold = null;
+    current = null; hold = null; music.stop(0.3); showInfo(null); phraseShown = ''; $('#dance-badge').hidden = true; stage.material.color.set(0x7e8da8);
     const M = segmentMatrices(shown), cm = rig.P.center, bodies = [];
     let minY = Infinity, maxY = -Infinity;
     for (const [name, list] of Object.entries(rig.segMeshes)) for (const mesh of list) {
@@ -370,19 +378,24 @@ export function createDance(ctx) {
     const sec = now / 1000, playing = !!current;
     let target = REST;
     if (playing) {
-      const d = DANCES[current], t = (((sec - startedAt) * speed) % d.period + d.period) % d.period;
+      // čas tance se sčítá po snímcích (i při změně rychlosti zůstane plynulý) a začíná s první dobou hudby
+      if (sec >= startAt) playT += Math.min(0.1, sec - Math.max(lastSec, startAt)) * speed;
+      const d = DANCES[current], t = ((playT % d.period) + d.period) % d.period;
       target = { ...blank(), ...d.pose(t) };
     }
+    lastSec = sec;
     const k = sm(0, 0.4, sec - blendStart);
     apply(k < 1 ? mix(blendFrom, target, k) : target);
-    if (playing) { const nm = DANCES[current].phrase((sec - startedAt) * speed); if (nm !== phraseShown) { phraseShown = nm; const el = $('#dance-badge'); el.hidden = false; el.textContent = nm; } }
+    if (playing && sec >= startAt) { const nm = DANCES[current].phrase(playT, true); if (nm !== phraseShown) { phraseShown = nm; const el = $('#dance-badge'); el.hidden = false; el.textContent = nm; } }
     return playing || k < 1;       // po postavení do klidu se vykreslování zastaví
   }
 
   function start(id) {
     if (phys) return;
-    const sec = performance.now() / 1000;
-    hold = null; blendFrom = { ...shown }; current = id; startedAt = sec; blendStart = sec;
+    const sec = performance.now() / 1000, d = DANCES[id];
+    const delay = mcfg.on ? music.start(d.song, speed) : 0;        // hudba i tanec začínají současně
+    hold = null; blendFrom = { ...shown }; current = id; startAt = sec + delay; playT = 0; lastSec = sec; blendStart = startAt;
+    stage.material.color.set(d.color); const bd = $('#dance-badge'); bd.style.borderColor = d.color; bd.style.color = '';
     document.querySelectorAll('#view-dance .dance-btn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.d === id)));
     $('#dance-stop').disabled = false;
     showInfo(id);
@@ -391,11 +404,11 @@ export function createDance(ctx) {
   function showInfo(id) {
     const el = $('#dance-info'), d = id && DANCES[id];
     el.hidden = !(d && d.info);
-    if (d && d.info) el.textContent = d.info;
+    if (d && d.info) el.innerHTML = `<p>${esc(d.info)}</p>${d.tell ? `<p><b>Poznáš ho podle:</b> ${esc(d.tell)}.</p>` : ''}<p class="muted small">🎵 Hudba: originální skladba (${esc(SONGS[d.song].label)}), ne původní nahrávka.</p>`;
   }
   function stopDance() {
     if (!current) return;
-    blendFrom = { ...shown }; current = null; blendStart = performance.now() / 1000;
+    blendFrom = { ...shown }; current = null; blendStart = performance.now() / 1000; music.stop(0.4); stage.material.color.set(0x7e8da8);
     document.querySelectorAll('#view-dance .dance-btn').forEach(b => b.setAttribute('aria-pressed', 'false'));
     $('#dance-stop').disabled = true; showInfo(null); phraseShown = ''; $('#dance-badge').hidden = true; viewer.requestRender();
   }
@@ -404,7 +417,9 @@ export function createDance(ctx) {
   $('#dance-stop', root).onclick = stopDance;
   $('#dance-scatter', root).onclick = scatter;
   $('#dance-assemble', root).onclick = assemble;
-  $('#dance-speed', root).oninput = e => { speed = e.target.value / 100; $('#dance-speed-val', root).textContent = e.target.value + ' %'; };
+  $('#dance-speed', root).oninput = e => { speed = e.target.value / 100; music.setSpeed(speed); $('#dance-speed-val', root).textContent = e.target.value + ' %'; };
+  $('#dance-music', root).onchange = e => { mcfg.on = e.target.checked; music.setEnabled(mcfg.on); store.set('danceMusic', mcfg); if (mcfg.on && current) music.start(DANCES[current].song, speed); else if (!mcfg.on) music.stop(0.1); };
+  $('#dance-vol', root).oninput = e => { mcfg.vol = e.target.value / 100; music.setVolume(mcfg.vol); store.set('danceMusic', mcfg); };
 
   return {
     enter() {
@@ -414,7 +429,7 @@ export function createDance(ctx) {
       frameDance(false);
       viewer.requestRender();
     },
-    leave() { active = false; root.hidden = true; current = null; phys = null; phraseShown = ''; $('#dance-badge').hidden = true; if (shadow) shadow.visible = true; restore(); setButtons(); },
-    _debug: { get rig() { return rig; }, scatter, assemble, get phys() { return phys; }, Y(id, t) { return compute({ ...blank(), ...DANCES[id].pose(t) }).Y; }, period: id => DANCES[id].period, phraseAt: (id, t) => DANCES[id].phrase(t), pose: (id, t) => ({ ...blank(), ...DANCES[id].pose(t) }), start, show(id, t) { current = null; hold = { ...blank(), ...DANCES[id].pose(t) }; viewer.requestRender(); } },
+    leave() { active = false; root.hidden = true; current = null; music.stop(0); phys = null; phraseShown = ''; $('#dance-badge').hidden = true; if (shadow) shadow.visible = true; restore(); setButtons(); },
+    _debug: { music, get rig() { return rig; }, scatter, assemble, get phys() { return phys; }, Y(id, t) { return compute({ ...blank(), ...DANCES[id].pose(t) }).Y; }, period: id => DANCES[id].period, phraseAt: (id, t) => DANCES[id].phrase(t), pose: (id, t) => ({ ...blank(), ...DANCES[id].pose(t) }), start, show(id, t) { current = null; hold = { ...blank(), ...DANCES[id].pose(t) }; viewer.requestRender(); } },
   };
 }

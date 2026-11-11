@@ -187,3 +187,6 @@ input[type=range] { width: 100%; min-height: var(--tap); accent-color: var(--acc
 .dance-phrase{margin:10px 0 0;padding:6px 12px;border-radius:999px;background:var(--surface2);font-weight:700;font-size:.9rem;display:inline-block}
 
 #dance-badge{position:absolute;left:10px;top:10px;z-index:2;padding:8px 14px;border-radius:999px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);font-weight:700;font-size:.95rem;max-width:55%}
+
+.music-row{align-items:center;margin:10px 0 0}
+.dance-info p{margin:0 0 6px}.dance-info p:last-child{margin:0}
