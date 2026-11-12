@@ -81,4 +81,4 @@ Vedle tanců jsou v záložce Tance další části:
 - **Rytmus:** noty padají v rytmu hudby (dráhy kopák, snare, ozdoba; klávesy A, S, D nebo klepnutí), počítá se skóre, combo a hodnocení, rekordy se ukládají.
 - **Vlastní:** skládání choreografie z kroků hotových tanců na vybranou hudbu, ukládání sestav.
 - **Fyzika:** tažení končetin, hlavy a trupu, klepnutím šťouchnutí, zvednutí za pánev a pád (z velké výšky se kostra rozsype).
-- **Studio:** převleky (cylindr, kšiltovka, párty čepice, brýle, sluneční brýle, sluchátka, afro, plášť), scény (disko, ulice, noc) a nahrávání videa (webm nebo mp4 podle prohlížeče) ke stažení nebo sdílení.
+- **Studio:** 21 převleků (klobouky a čepice, koruna, svatozář, králičí uši, brýle, sluchátka, afro, motýlek, šála, řetěz, batoh, plášť, křídla) a 10 scén (disko, ulice, noc, pláž, vesmír, pódium, zima, hrad, moře) a nahrávání videa (webm nebo mp4 podle prohlížeče) ke stažení nebo sdílení.
