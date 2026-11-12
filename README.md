@@ -78,6 +78,7 @@ node tools/build-model.mjs <složka_stl> 0.25    # kostra.glb + barvy pro režim
 Vedle tanců jsou v záložce Tance další části:
 
 - **Bitva:** dva kostlivci vedle sebe, každý jiný tanec, po 8 dobách se střídají. Po osmi kolech lze hlasovat, výhry se ukládají v prohlížeči.
+- **Skupina:** 2 až 6 kostlivců tančí společně. Sestava je sled částí s formací (řada, véčko, kruh, dvě řady, schody, cikcak, skupinka), způsobem (unisono, kánon, zrcadlo) a délkou; mezi formacemi se plynule přesouvají. Hotové choreografie i vlastní, uložitelné.
 - **Rytmus:** noty padají v rytmu hudby (dráhy kopák, snare, ozdoba; klávesy A, S, D nebo klepnutí), počítá se skóre, combo a hodnocení, rekordy se ukládají.
 - **Vlastní:** skládání choreografie z kroků hotových tanců na vybranou hudbu, ukládání sestav.
 - **Fyzika:** tažení končetin, hlavy a trupu, klepnutím šťouchnutí, zvednutí za pánev a pád (z velké výšky se kostra rozsype).

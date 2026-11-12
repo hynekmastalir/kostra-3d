@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { bones } from './data.js';
 import { $, esc } from './ui.js';
-import { DANCES, KEYS, SIDES, blank, mix } from './choreo.js';
+import { DANCES, KEYS, SIDES, blank, mix, mirror } from './choreo.js';
 import { createMusic, SONGS } from './music.js';
 import { store } from './storage.js';
 import { createFun } from './fun.js';
@@ -430,7 +430,7 @@ export function createDance(ctx) {
   const core = {
     THREE, viewer, music, mcfg, DANCES, SONGS, store, root, hooks,
     get rig() { return rig; }, get stage() { return stage; }, get shadow() { return shadow; }, get shown() { return shown; }, get current() { return current; }, get speed() { return speed; }, get phys() { return phys; },
-    compute, applyRig, apply, frameDance, start, stopDance, scatter, assemble, blank, mix, sm, setButtons,
+    compute, applyRig, apply, frameDance, mirror, start, stopDance, scatter, assemble, blank, mix, sm, setButtons,
     setBadge(text, color) { const el = $('#dance-badge'); el.hidden = !text; if (text) { el.textContent = text; el.style.borderColor = color || ''; } },
     cloneRig(tint) {                       // druhá kostra: kopie kostí se sdílenou geometrií
       const segMeshes = {}, meshes = [];

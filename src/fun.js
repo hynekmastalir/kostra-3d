@@ -4,8 +4,9 @@ import { createRhythm } from './rhythm.js';
 import { createComposer } from './composer.js';
 import { createPuppet } from './puppet.js';
 import { createStudio } from './studio.js';
+import { createGroup } from './group.js';
 
 export function createFun(core) {
-  const sections = [createBattle(core), createRhythm(core), createComposer(core), createPuppet(core), createStudio(core)];
+  const sections = [createBattle(core), createGroup(core), createRhythm(core), createComposer(core), createPuppet(core), createStudio(core)];
   return { sections, cleanup() { sections.forEach(s => s.cleanup?.()); } };
 }
