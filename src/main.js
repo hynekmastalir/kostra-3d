@@ -1,4 +1,5 @@
 import './style.css';
+import { registerSW } from 'virtual:pwa-register';
 import { store } from './storage.js';
 import { $, $$ } from './ui.js';
 
@@ -107,3 +108,14 @@ async function init() {
   }
 }
 init();
+
+// Aktualizace aplikace: nová verze se stáhne na pozadí a stránka se sama obnoví, jakmile je připravená.
+// Kontrola probíhá při startu, po návratu do aplikace a každou hodinu.
+if ('serviceWorker' in navigator) {
+  const upd = registerSW({ immediate: true, onRegisteredSW(_url, reg) {
+    if (!reg) return;
+    setInterval(() => reg.update().catch(() => {}), 3600 * 1000);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => {}); });
+  } });
+  void upd;
+}

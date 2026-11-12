@@ -10,6 +10,7 @@ export default defineConfig({
   build: { target: 'es2020', chunkSizeWarningLimit: 900 },
   plugins: [
     VitePWA({
+      injectRegister: false,
       registerType: 'autoUpdate',          // nová verze se načte sama při dalším spuštění
       includeAssets: ['icons/apple-touch-icon.png', 'icons/icon.svg'],
       manifest: {
